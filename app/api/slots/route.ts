@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { getBookingByToken, getPublicEvent, getPublicHost, getSlotInputs } from "@/lib/booking/queries";
 import { generateSlots } from "@/lib/scheduling/slots";
+import { createClient } from "@/lib/supabase/server";
 
 const MAX_RANGE_MS = 62 * 86_400_000;
 
@@ -14,6 +15,8 @@ const querySchema = z.object({
     .string()
     .regex(/^[A-Za-z0-9_-]{43}$/)
     .optional(),
+  /** Host rescheduling (signed in): booking id. */
+  booking: z.uuid().optional(),
 });
 
 const json = (body: unknown, status = 200) =>
@@ -29,6 +32,8 @@ export async function GET(request: Request) {
   const to = new Date(query.data.to);
   if (!(from < to) || to.getTime() - from.getTime() > MAX_RANGE_MS)
     return json({ error: "invalid_input" }, 400);
+
+  if (query.data.booking) return hostSlots(query.data.booking, from, to);
 
   const host = await getPublicHost(query.data.username);
   const event = host ? await getPublicEvent(host.id, query.data.event) : null;
@@ -59,5 +64,45 @@ export async function GET(request: Request) {
     to,
   });
 
+  return json({ slots: slots.map((s) => s.toISOString()) });
+}
+
+/**
+ * Host reschedule (RN-53, RN-54): the signed-in host may move its own booking to any
+ * free time before it starts, ignoring the minimum notice. Ownership is checked with RLS.
+ */
+async function hostSlots(bookingId: string, from: Date, to: Date) {
+  const supabase = await createClient();
+  const { data: claims } = await supabase.auth.getClaims();
+  const userId = claims?.claims?.sub;
+  if (!userId) return json({ error: "not_authenticated" }, 401);
+
+  const [{ data: booking }, { data: profile }] = await Promise.all([
+    supabase
+      .from("bookings")
+      .select("id, host_id, event_type_id, status, start_at, end_at")
+      .eq("id", bookingId)
+      .eq("host_id", userId)
+      .maybeSingle(),
+    supabase.from("profiles").select("time_zone").eq("id", userId).single(),
+  ]);
+  if (!booking || !profile || booking.status === "cancelled" || new Date(booking.start_at) <= new Date()) {
+    return json({ error: "booking_not_found" }, 404);
+  }
+
+  const inputs = await getSlotInputs(userId, booking.event_type_id, from, to, { trusted: true });
+  const start = new Date(booking.start_at).getTime();
+  const slots = generateSlots({
+    ...inputs,
+    event: { ...inputs.event, minNoticeMinutes: 0 },
+    busy: inputs.busy.filter(
+      (b) => !(b.eventTypeId === booking.event_type_id && b.start.getTime() === start),
+    ),
+    durationMinutes: Math.round((new Date(booking.end_at).getTime() - start) / 60_000),
+    hostTimeZone: profile.time_zone,
+    now: new Date(),
+    from,
+    to,
+  });
   return json({ slots: slots.map((s) => s.toISOString()) });
 }
