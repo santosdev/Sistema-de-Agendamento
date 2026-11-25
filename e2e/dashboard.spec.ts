@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { E2E_EVENT_PREFIX } from "./cleanup";
 
 /** Host dashboard with the demo account (RN-66 to RN-73). Seed data is protected, so edits are simulated. */
 
@@ -72,7 +73,7 @@ test("demo host creates, edits and deletes an event type", async ({ page }, info
   await main(page).getByRole("link", { name: "Novo tipo de evento" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Novo tipo de evento" })).toBeVisible();
 
-  const title = `E2E ${Date.now().toString(36)}`;
+  const title = `${E2E_EVENT_PREFIX}${Date.now().toString(36)}`;
   await main(page).getByLabel("Título").fill(title);
   const slug = await main(page).getByLabel("Endereço do evento").inputValue();
   expect(slug).toBe(title.toLowerCase().replace(" ", "-"));
