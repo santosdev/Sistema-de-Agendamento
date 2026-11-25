@@ -4,7 +4,8 @@ import { z } from "zod";
 /** Server-only secrets. Never import this from a Client Component. */
 const schema = z.object({
   SUPABASE_SECRET_KEY: z.string().min(1),
-  RESEND_API_KEY: z.string().min(1),
+  // Optional until emails are configured: without it, emails are skipped and logged.
+  RESEND_API_KEY: z.preprocess((v) => (v === "" ? undefined : v), z.string().min(1).optional()),
   EMAIL_FROM: z.string().min(3),
   RATE_LIMIT_SALT: z.string().min(32),
   CRON_SECRET: z.string().min(32),
