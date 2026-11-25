@@ -45,12 +45,17 @@ export function guestFormSchema(
   return z.object({
     name: z.string().trim().min(2, t.nameTooShort).max(100, t.tooLong),
     email: z.string().trim().toLowerCase().pipe(z.email(t.invalidEmail)).pipe(z.string().max(254, t.tooLong)),
+    // Empty and invalid are different messages: "abc" normalizes to "" but was not left empty.
     phone: z
       .string()
-      .transform(normalizePhone)
-      .refine((v) => (v === "" ? !phoneRequired : E164.test(v)), {
-        error: phoneRequired ? t.phoneRequired : t.invalidPhone,
-      }),
+      .superRefine((raw, ctx) => {
+        if (raw.trim() === "") {
+          if (phoneRequired) ctx.addIssue({ code: "custom", message: t.phoneRequired });
+          return;
+        }
+        if (!E164.test(normalizePhone(raw))) ctx.addIssue({ code: "custom", message: t.invalidPhone });
+      })
+      .transform(normalizePhone),
     answers: z.object(Object.fromEntries(event.questions.map((q) => [q.id, answerSchema(q, t)]))),
     /** Honeypot (RN, 6.1): humans never see or fill it. */
     website: z.string().optional(),

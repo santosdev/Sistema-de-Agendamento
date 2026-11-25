@@ -59,6 +59,10 @@ describe("guestFormSchema", () => {
     const result = guestFormSchema(phoneEvent, t).safeParse({ ...valid, phone: "" });
     expect(result.success).toBe(false);
     expect(result.error?.issues[0].message).toBe(t.phoneRequired);
+
+    // Typed but not a phone: says it is invalid, not that it is missing.
+    const typed = guestFormSchema(phoneEvent, t).safeParse({ ...valid, phone: "abc" });
+    expect(typed.error?.issues[0].message).toBe(t.invalidPhone);
   });
 
   it("enforces required questions and valid options", () => {

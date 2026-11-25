@@ -24,12 +24,39 @@ export type CreateBookingResult =
   { ok: true; booking: CreatedBooking } | { ok: false; error: BookingErrorCode };
 export type ManageResult = { ok: true } | { ok: false; error: ManageErrorCode };
 
+const UNEXPECTED = { ok: false, error: "unknown" } as const;
+
+/**
+ * Unexpected failures (invalid env, network, Supabase down) are logged and returned as
+ * "unknown", so the guest sees an error message instead of a button stuck in loading.
+ */
+async function safely<T>(label: string, run: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    console.error(`${label} failed`, error);
+    return fallback;
+  }
+}
+
+export async function createBookingAction(input: unknown): Promise<CreateBookingResult> {
+  return safely("createBookingAction", () => createBooking(input), UNEXPECTED);
+}
+
+export async function cancelBookingAction(input: unknown): Promise<ManageResult> {
+  return safely("cancelBookingAction", () => cancelBooking(input), UNEXPECTED);
+}
+
+export async function rescheduleBookingAction(input: unknown): Promise<ManageResult> {
+  return safely("rescheduleBookingAction", () => rescheduleBooking(input), UNEXPECTED);
+}
+
 /**
  * Guest booking (RN-39 to RN-43, RN-59, RN-60).
  * Validates with Zod, applies the honeypot and the rate limit, then calls the
  * database function, which validates everything again.
  */
-export async function createBookingAction(input: unknown): Promise<CreateBookingResult> {
+async function createBooking(input: unknown): Promise<CreateBookingResult> {
   const request = createBookingRequestSchema.safeParse(input);
   if (!request.success) return { ok: false, error: "invalid_guest" };
   const { username, eventSlug, startAt, timeZone } = request.data;
@@ -104,7 +131,7 @@ async function manageAllowed(): Promise<boolean> {
 }
 
 /** Guest cancellation through the manage link (RN-48, RN-50). */
-export async function cancelBookingAction(input: unknown): Promise<ManageResult> {
+async function cancelBooking(input: unknown): Promise<ManageResult> {
   const request = cancelRequestSchema.safeParse(input);
   if (!request.success) return { ok: false, error: "booking_not_found" };
   if (!(await manageAllowed())) return { ok: false, error: "rate_limited" };
@@ -123,7 +150,7 @@ export async function cancelBookingAction(input: unknown): Promise<ManageResult>
 }
 
 /** Guest reschedule through the manage link (RN-52 to RN-55). */
-export async function rescheduleBookingAction(input: unknown): Promise<ManageResult> {
+async function rescheduleBooking(input: unknown): Promise<ManageResult> {
   const request = rescheduleRequestSchema.safeParse(input);
   if (!request.success) return { ok: false, error: "booking_not_found" };
   if (!(await manageAllowed())) return { ok: false, error: "rate_limited" };

@@ -61,8 +61,9 @@ export function Calendar({
     return null;
   }, [availableDays, month.year, month.month, total]);
 
-  // Roving tabindex: one focusable day.
-  const [focused, setFocused] = useState<LocalDate>(first);
+  // Roving tabindex: one focusable day. Until the guest moves, Tab lands on the
+  // selected day or the first available one (DESIGN.md 7.5), never on a blocked day 1.
+  const [focused, setFocused] = useState<LocalDate | null>(null);
   const [keyboardNav, setKeyboardNav] = useState(false);
   const tabbable = inMonth(focused) ? focused : inMonth(selected) ? selected! : (firstAvailable ?? first);
 

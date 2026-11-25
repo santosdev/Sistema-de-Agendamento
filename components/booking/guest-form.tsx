@@ -132,7 +132,12 @@ export function GuestForm({ event, submitting, serverError, onSubmit, formId }: 
           >
             <legend className="mb-1.5 text-label text-ink-secondary">
               {q.label}
-              {optional ? <span className="ml-1 text-ink-muted">{optional}</span> : null}
+              {optional ? (
+                <>
+                  {" "}
+                  <span className="text-ink-muted">{optional}</span>
+                </>
+              ) : null}
             </legend>
             {q.options?.map((option, i) => (
               <label
@@ -166,7 +171,7 @@ export function GuestForm({ event, submitting, serverError, onSubmit, formId }: 
 
       <p className="text-caption text-ink-muted">{t.privacy}</p>
 
-      <Button type="submit" size="lg" loading={submitting} className="hidden w-full sm:inline-flex">
+      <Button type="submit" size="lg" loading={submitting} className="w-full max-sm:hidden">
         {submitting ? t.submitting : t.submit}
       </Button>
     </form>

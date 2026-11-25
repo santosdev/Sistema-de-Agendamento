@@ -120,13 +120,14 @@ export function BookingFlow({ host, event, embed }: Props) {
     if (!selectedSlot || !timeZone) return;
     setSubmitting(true);
     setServerError(null);
+    // A network failure rejects the call; treat it like any other unknown error.
     const result = await createBookingAction({
       username: host.username,
       eventSlug: event.slug,
       startAt: selectedSlot,
       timeZone,
       guest: values,
-    });
+    }).catch(() => ({ ok: false, error: "unknown" }) as const);
     setSubmitting(false);
 
     if (result.ok) {
@@ -303,7 +304,7 @@ export function BookingFlow({ host, event, embed }: Props) {
                           size="lg"
                           disabled={!selectedSlot}
                           onClick={() => setStep("details")}
-                          className="mt-auto hidden w-full sm:inline-flex"
+                          className="mt-auto w-full max-sm:hidden"
                         >
                           {continueLabel}
                         </Button>

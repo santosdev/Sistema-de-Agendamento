@@ -3,7 +3,7 @@
 import { CalendarDays, CalendarPlus, ExternalLink, Globe } from "lucide-react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { describeLocation, LocationIcon } from "@/components/booking/location";
 import { Alert } from "@/components/ui/alert";
 import { Avatar } from "@/components/ui/avatar";
@@ -35,6 +35,27 @@ export function ManageBooking({ token, booking, isPast }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [timeZone, setTimeZone] = useState(booking.guestTimeZone);
+  const modeChanged = useRef(false);
+
+  // Keyboard and screen reader users keep their place when the panel swaps:
+  // the reschedule heading on open, the "Remarcar" button on return.
+  // Waits for the exit animation (AnimatePresence mode="wait") before focusing.
+  useEffect(() => {
+    if (!modeChanged.current) return;
+    const timer = setTimeout(
+      () => {
+        const target = mode === "reschedule" ? "reschedule-title" : "reschedule-button";
+        document.getElementById(target)?.focus();
+      },
+      DURATION.base * 1000 + 40,
+    );
+    return () => clearTimeout(timer);
+  }, [mode]);
+
+  function changeMode(next: "view" | "reschedule") {
+    modeChanged.current = true;
+    setMode(next);
+  }
 
   const host = booking.host;
   const status = booking.status === "cancelled" ? "cancelled" : isPast ? "past" : booking.status;
@@ -49,7 +70,9 @@ export function ManageBooking({ token, booking, isPast }: Props) {
   function cancel(reason: string) {
     setError(null);
     startTransition(async () => {
-      const result = await cancelBookingAction({ token, reason: reason || undefined });
+      const result = await cancelBookingAction({ token, reason: reason || undefined }).catch(
+        () => ({ ok: false, error: "unknown" }) as const,
+      );
       if (!result.ok) {
         setError(errorText(result.error));
         return;
@@ -63,12 +86,14 @@ export function ManageBooking({ token, booking, isPast }: Props) {
   function reschedule(startAt: string) {
     setError(null);
     startTransition(async () => {
-      const result = await rescheduleBookingAction({ token, startAt });
+      const result = await rescheduleBookingAction({ token, startAt }).catch(
+        () => ({ ok: false, error: "unknown" }) as const,
+      );
       if (!result.ok) {
         setError(errorText(result.error));
         return;
       }
-      setMode("view");
+      changeMode("view");
       setSuccess(t.manage.rescheduleFlow.done);
       router.refresh();
     });
@@ -90,13 +115,14 @@ export function ManageBooking({ token, booking, isPast }: Props) {
                 token={token}
                 username={host.username}
                 eventSlug={booking.eventSlug}
+                currentStartAt={booking.startAt}
                 timeZone={timeZone}
                 onTimeZoneChange={setTimeZone}
                 pending={pending}
                 error={error}
                 onConfirm={reschedule}
                 onCancel={() => {
-                  setMode("view");
+                  changeMode("view");
                   setError(null);
                 }}
               />
@@ -208,11 +234,12 @@ export function ManageBooking({ token, booking, isPast }: Props) {
               ) : isPast ? null : booking.canModify ? (
                 <div className="flex flex-col gap-2 border-t border-divider pt-5 sm:flex-row">
                   <Button
+                    id="reschedule-button"
                     variant="secondary"
                     onClick={() => {
                       setSuccess(null);
                       setError(null);
-                      setMode("reschedule");
+                      changeMode("reschedule");
                     }}
                   >
                     {t.manage.reschedule}

@@ -7,7 +7,7 @@ import { TimeZonePicker } from "@/components/booking/time-zone-picker";
 import { useMonthSlots, type YearMonth } from "@/components/booking/use-month-slots";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { formatTime } from "@/lib/format";
+import { formatLongDate, formatTime } from "@/lib/format";
 import { fill, getMessages } from "@/lib/i18n";
 import { localDateOf, type LocalDate } from "@/lib/scheduling/time";
 
@@ -15,6 +15,8 @@ type Props = {
   token: string;
   username: string;
   eventSlug: string;
+  /** Current start of the booking, shown so the guest knows what is being replaced. */
+  currentStartAt: string;
   timeZone: string;
   onTimeZoneChange: (zone: string) => void;
   pending: boolean;
@@ -30,7 +32,7 @@ const monthOf = (date: LocalDate): YearMonth => ({
 
 /** Picks a new time for an existing booking (RN-52 to RN-55). */
 export function ReschedulePanel(props: Props) {
-  const { token, username, eventSlug, timeZone, pending, error } = props;
+  const { token, username, eventSlug, currentStartAt, timeZone, pending, error } = props;
   const t = getMessages();
   const [now] = useState(() => new Date());
   const today = localDateOf(now, timeZone);
@@ -54,13 +56,20 @@ export function ReschedulePanel(props: Props) {
   return (
     <section aria-labelledby="reschedule-title" className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2
-          id="reschedule-title"
-          tabIndex={-1}
-          className="font-display text-heading text-ink focus:outline-none"
-        >
-          {t.manage.rescheduleFlow.title}
-        </h2>
+        <div className="flex flex-col gap-1">
+          <h2
+            id="reschedule-title"
+            tabIndex={-1}
+            className="font-display text-heading text-ink focus:outline-none"
+          >
+            {t.manage.rescheduleFlow.title}
+          </h2>
+          <p className="text-caption text-ink-muted">
+            {fill(t.manage.rescheduleFlow.current, {
+              time: `${formatLongDate(currentStartAt, timeZone)}, ${formatTime(currentStartAt, timeZone)}`,
+            })}
+          </p>
+        </div>
         <TimeZonePicker value={timeZone} onChange={props.onTimeZoneChange} />
       </div>
 

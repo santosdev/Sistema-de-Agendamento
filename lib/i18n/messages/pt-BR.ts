@@ -147,7 +147,7 @@ export const ptBR = {
     bookAgain: "Agendar de novo",
     cancelDialog: {
       title: "Cancelar reunião com {name}?",
-      body: "{name} será avisado. Esta ação não pode ser desfeita.",
+      body: "Vamos avisar {name}. Esta ação não pode ser desfeita.",
       reasonLabel: "Motivo",
       reasonHint: "Opcional. Aparece para {name}.",
       confirm: "Cancelar reunião",
