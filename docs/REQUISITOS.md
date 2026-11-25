@@ -61,7 +61,8 @@ Convenções:
 - RN-03: Entre 3 e 30 caracteres, apenas `a-z`, `0-9` e `-`. Não pode começar nem terminar com `-`.
 - RN-04: Único e sem diferenciar maiúsculas (salvo sempre em minúsculas).
 - RN-05: Palavras reservadas são bloqueadas: `dashboard`, `booking`, `api`, `login`, `logout`, `signup`,
-  `auth`, `demo`, `settings`, `embed`, `admin`, `app`, `static`, `public`, `_next`.
+  `auth`, `demo`, `settings`, `embed`, `admin`, `app`, `static`, `public`, `_next`, `privacy`, `privacidade`,
+  `terms`, `termos`, `help`, `ajuda`.
 - RN-06: Ao trocar o username, o link antigo deixa de funcionar. A interface avisa antes de salvar.
 
 ### 3.3 Dados do perfil

@@ -23,11 +23,6 @@ export const ptBR = {
     genericError: "Algo deu errado. Tente de novo em instantes.",
     timeRange: "{start} a {end}",
   },
-  home: {
-    title: "Agendamento de reuniões",
-    subtitle: "Em construção. Em breve você poderá marcar uma conversa com a gente por aqui.",
-    demoLink: "Ver a página de demonstração",
-  },
   notFound: {
     title: "Página não encontrada",
     body: "O endereço pode ter mudado ou o link está incompleto.",
@@ -451,6 +446,84 @@ export const ptBR = {
       title: "Reunião remarcada",
       intro: "Olá, {name}. {host} mudou o horário da sua reunião.",
     },
+  },
+  landing: {
+    title: "Agende reuniões sem troca de mensagens",
+    subtitle:
+      "Mostre seus horários livres, deixe o convidado escolher no fuso dele e receba a confirmação por e-mail, com convite para o calendário.",
+    seeDemo: "Ver a página de demonstração",
+    tryDashboard: "Entrar no painel demo",
+    signUp: "Criar conta grátis",
+    signIn: "Entrar",
+    featuresHeading: "Como funciona",
+    features: {
+      availability: {
+        title: "Sua disponibilidade, suas regras",
+        body: "Horários semanais, folgas, antecedência mínima, intervalos entre reuniões e limite por dia.",
+      },
+      timeZone: {
+        title: "No fuso de quem agenda",
+        body: "O convidado vê os horários no fuso dele e recebe tudo no horário certo, inclusive no horário de verão.",
+      },
+      manage: {
+        title: "Cancelar e remarcar sem login",
+        body: "Cada reserva tem um link seguro. O convite do calendário se atualiza sozinho.",
+      },
+    },
+    privacy: "Política de privacidade",
+  },
+  privacy: {
+    title: "Política de privacidade",
+    updated: "Atualizada em {date}.",
+    intro:
+      "Esta política explica quais dados a Agenda Tech Resolute usa, para quê e por quanto tempo, conforme a Lei Geral de Proteção de Dados (LGPD).",
+    sections: {
+      data: {
+        title: "Dados que coletamos",
+        body: "De quem agenda: nome, e-mail, telefone quando informado, respostas às perguntas do evento e fuso horário. De quem recebe agendamentos: nome, e-mail, foto opcional, fuso e as configurações da agenda.",
+      },
+      purpose: {
+        title: "Para que usamos",
+        body: "Apenas para marcar, confirmar, remarcar ou cancelar a reunião e avisar as duas partes por e-mail. Não vendemos dados nem usamos para publicidade.",
+      },
+      sharing: {
+        title: "Com quem compartilhamos",
+        body: "Os dados da reserva são vistos pelo anfitrião da reunião. Para funcionar, usamos fornecedores que tratam os dados em nosso nome: Supabase (banco de dados e login), Resend (envio de e-mails) e Vercel (hospedagem).",
+      },
+      retention: {
+        title: "Por quanto tempo guardamos",
+        body: "Os dados pessoais de convidados são anonimizados automaticamente 12 meses depois do fim da reunião. A reserva continua no histórico do anfitrião, sem nome, e-mail, telefone ou respostas.",
+      },
+      cookies: {
+        title: "Cookies",
+        body: "Usamos apenas os cookies necessários para manter o anfitrião conectado ao painel. Não usamos cookies de rastreamento.",
+      },
+      rights: {
+        title: "Seus direitos",
+        body: "Você pode pedir acesso, correção ou exclusão dos seus dados. Convidados podem cancelar a reunião pelo link recebido por e-mail e falar com o anfitrião. Para outros pedidos, entre em contato com a Tech Resolute.",
+      },
+    },
+    back: "Voltar",
+  },
+  embed: {
+    title: "Incorporar no seu site",
+    intro: "Use um destes códigos para levar o agendamento para o seu site.",
+    event: "Evento",
+    kinds: {
+      button: "Botão com janela",
+      inline: "Na página",
+      link: "Link direto",
+    },
+    hints: {
+      button: "Um botão que abre o agendamento em uma janela sobre o seu site.",
+      inline: "O calendário aparece dentro da página, no lugar do código.",
+      link: "Para usar em e-mails, redes sociais ou qualquer botão.",
+    },
+    copyCode: "Copiar código",
+    codeLabel: "Código para {kind}",
+    buttonLabel: "Agendar conversa",
+    example: "Ver exemplo de integração",
+    close: "Fechar agendamento",
   },
 } as const;
 

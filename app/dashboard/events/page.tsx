@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import { EmbedCodes } from "@/components/dashboard/embed-codes";
 import { EventTypesList } from "@/components/dashboard/event-types-list";
 import { PageShell } from "@/components/dashboard/page-shell";
 import { ButtonLink } from "@/components/ui/button";
@@ -21,6 +22,11 @@ export default async function EventTypesPage() {
       }
     >
       <EventTypesList events={events} baseUrl={`${publicEnv().NEXT_PUBLIC_APP_URL}/${host.username}`} />
+      <EmbedCodes
+        events={events.filter((e) => e.is_active).map((e) => ({ slug: e.slug, title: e.title }))}
+        appUrl={publicEnv().NEXT_PUBLIC_APP_URL}
+        username={host.username}
+      />
     </PageShell>
   );
 }

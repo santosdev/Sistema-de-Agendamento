@@ -21,11 +21,6 @@ export const en: Messages = {
     genericError: "Something went wrong. Please try again shortly.",
     timeRange: "{start} to {end}",
   },
-  home: {
-    title: "Meeting scheduling",
-    subtitle: "Under construction. Soon you will be able to book a call with us here.",
-    demoLink: "See the demo page",
-  },
   notFound: {
     title: "Page not found",
     body: "The address may have changed or the link is incomplete.",
@@ -450,5 +445,83 @@ export const en: Messages = {
       title: "Meeting rescheduled",
       intro: "Hi {name}. {host} changed the time of your meeting.",
     },
+  },
+  landing: {
+    title: "Book meetings without the back and forth",
+    subtitle:
+      "Share your free times, let guests pick in their own time zone and get the confirmation by email, with a calendar invite.",
+    seeDemo: "See the demo page",
+    tryDashboard: "Open the demo dashboard",
+    signUp: "Create a free account",
+    signIn: "Sign in",
+    featuresHeading: "How it works",
+    features: {
+      availability: {
+        title: "Your availability, your rules",
+        body: "Weekly hours, days off, minimum notice, breaks between meetings and a daily limit.",
+      },
+      timeZone: {
+        title: "In the guest time zone",
+        body: "Guests see times in their own zone and get everything at the right hour, daylight saving included.",
+      },
+      manage: {
+        title: "Cancel and reschedule without login",
+        body: "Every booking has a secure link. The calendar invite updates itself.",
+      },
+    },
+    privacy: "Privacy policy",
+  },
+  privacy: {
+    title: "Privacy policy",
+    updated: "Updated on {date}.",
+    intro:
+      "This policy explains which data Tech Resolute Scheduling uses, why and for how long, under the Brazilian General Data Protection Law (LGPD).",
+    sections: {
+      data: {
+        title: "Data we collect",
+        body: "From guests: name, email, phone when given, answers to the event questions and time zone. From hosts: name, email, optional photo, time zone and scheduling settings.",
+      },
+      purpose: {
+        title: "Why we use it",
+        body: "Only to book, confirm, reschedule or cancel the meeting and to email both sides. We do not sell data or use it for advertising.",
+      },
+      sharing: {
+        title: "Who we share it with",
+        body: "Booking data is seen by the meeting host. To run the service we use providers that process data on our behalf: Supabase (database and login), Resend (email) and Vercel (hosting).",
+      },
+      retention: {
+        title: "How long we keep it",
+        body: "Guest personal data is anonymized automatically 12 months after the meeting ends. The booking stays in the host history without name, email, phone or answers.",
+      },
+      cookies: {
+        title: "Cookies",
+        body: "We only use the cookies needed to keep hosts signed in to the dashboard. No tracking cookies.",
+      },
+      rights: {
+        title: "Your rights",
+        body: "You can ask to access, correct or delete your data. Guests can cancel through the emailed link and talk to the host. For other requests, contact Tech Resolute.",
+      },
+    },
+    back: "Back",
+  },
+  embed: {
+    title: "Embed on your website",
+    intro: "Use one of these codes to bring booking to your website.",
+    event: "Event",
+    kinds: {
+      button: "Button with popup",
+      inline: "Inline",
+      link: "Direct link",
+    },
+    hints: {
+      button: "A button that opens booking in a popup over your site.",
+      inline: "The calendar shows inside the page, where the code is.",
+      link: "For emails, social media or any button.",
+    },
+    copyCode: "Copy code",
+    codeLabel: "Code for {kind}",
+    buttonLabel: "Book a call",
+    example: "See an integration example",
+    close: "Close booking",
   },
 };

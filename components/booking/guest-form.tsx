@@ -169,7 +169,17 @@ export function GuestForm({ event, submitting, serverError, onSubmit, formId }: 
         <input id="guest-website" tabIndex={-1} autoComplete="off" {...register("website")} />
       </div>
 
-      <p className="text-caption text-ink-muted">{t.privacy}</p>
+      <p className="text-caption text-ink-muted">
+        {t.privacy} {/* New tab: the form may be inside an iframe (embed) and must keep its state. */}
+        <a
+          href="/privacy"
+          target="_blank"
+          rel="noreferrer"
+          className="font-medium text-brand underline-offset-2 hover:underline"
+        >
+          {t.privacyLink}
+        </a>
+      </p>
 
       <Button type="submit" size="lg" loading={submitting} className="w-full max-sm:hidden">
         {submitting ? t.submitting : t.submit}

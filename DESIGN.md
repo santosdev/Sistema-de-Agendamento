@@ -303,7 +303,8 @@ Mesmo formato do chip, com ponto de 6 px à esquerda.
 - Linha de abas com borda inferior `divider`. Ativa: texto `ink` 600 e sublinhado de 2 px `brand`.
   Inativa: texto `ink-muted`, hover `ink`.
 - Contador opcional ao lado do rótulo, em chip neutro.
-- Padrão ARIA `tablist`, setas para navegar. O sublinhado desliza entre abas (7.12).
+- Cada aba é um link (`?tab=`) com `aria-current="page"` na ativa: a URL guarda a aba, o voltar do navegador funciona
+  e a navegação por Tab é a padrão. Sublinhado fixo, sem animação.
 
 ### 7.10 Item de reunião (painel)
 Linha em card `rounded-card-sm`, altura mínima 72 px:
@@ -311,8 +312,9 @@ Linha em card `rounded-card-sm`, altura mínima 72 px:
 2. Barra vertical de 3 px com a cor do evento, raio 999 px.
 3. Nome do convidado (`text-body` 600) e, abaixo, evento · local (`text-caption` `ink-muted`).
 4. Badge de status.
-5. Menu (botão só de ícone `Ellipsis`, `aria-label="Ações da reunião com {nome}"`): Ver detalhes, Remarcar,
-   Cancelar, Copiar link de gestão.
+5. Botão só de ícone (`ChevronDown`, `aria-expanded`, `aria-label="Ações da reunião com {nome}"`) que abre os
+   detalhes (e-mail, telefone, fuso do convidado, local, respostas) e as ações Remarcar e Cancelar. Não há
+   "Copiar link de gestão": o banco guarda só o hash do token (RN-46), então o link existe apenas no e-mail do convidado.
 
 Agrupado por dia com cabeçalho "Hoje", "Amanhã" ou data por extenso. No mobile, horário e status ficam
 na mesma linha e o restante quebra embaixo.

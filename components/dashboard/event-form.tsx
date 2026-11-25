@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState, useTransition, type ReactNode } from "react";
+import { useId, useMemo, useRef, useState, useTransition, type ReactNode } from "react";
 import { useFieldArray, useForm, type FieldError as RhfError } from "react-hook-form";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,8 @@ export function EventForm({ id, initial, baseUrl }: Props) {
   const t = getMessages();
   const te = t.dashboard.events;
   const router = useRouter();
+  // Unique per form: Next keeps hidden copies of visited pages in the DOM.
+  const uid = useId();
   const schema = useMemo(() => eventTypeSchema(te.errors), [te]);
   const {
     register,
@@ -64,12 +66,12 @@ export function EventForm({ id, initial, baseUrl }: Props) {
 
   const err = (e: RhfError | undefined) => e?.message;
   const num = (name: keyof EventFormValues, label: string, hint?: string) => (
-    <Field id={`ev-${name}`} label={label} hint={hint} error={err(errors[name] as RhfError)}>
+    <Field id={`${uid}-${name}`} label={label} hint={hint} error={err(errors[name] as RhfError)}>
       <Input
-        id={`ev-${name}`}
+        id={`${uid}-${name}`}
         inputMode="numeric"
         aria-invalid={!!errors[name] || undefined}
-        aria-describedby={describedBy(`ev-${name}`, { hint, error: err(errors[name] as RhfError) })}
+        aria-describedby={describedBy(`${uid}-${name}`, { hint, error: err(errors[name] as RhfError) })}
         {...register(name)}
       />
     </Field>
@@ -107,11 +109,11 @@ export function EventForm({ id, initial, baseUrl }: Props) {
       {saved ? <Alert tone="success">{saved}</Alert> : null}
 
       <Section title={te.sections.basics}>
-        <Field id="ev-title" label={te.fields.title} error={err(errors.title)}>
+        <Field id={`${uid}-title`} label={te.fields.title} error={err(errors.title)}>
           <Input
-            id="ev-title"
+            id={`${uid}-title`}
             aria-invalid={!!errors.title || undefined}
-            aria-describedby={describedBy("ev-title", { error: err(errors.title) })}
+            aria-describedby={describedBy(`${uid}-title`, { error: err(errors.title) })}
             {...register("title", {
               onChange: (e) => {
                 if (!slugEdited.current)
@@ -122,23 +124,23 @@ export function EventForm({ id, initial, baseUrl }: Props) {
             })}
           />
         </Field>
-        <Field id="ev-slug" label={te.fields.slug} hint={slugHint} error={err(errors.slug)}>
+        <Field id={`${uid}-slug`} label={te.fields.slug} hint={slugHint} error={err(errors.slug)}>
           <Input
-            id="ev-slug"
+            id={`${uid}-slug`}
             spellCheck={false}
             autoCapitalize="none"
             aria-invalid={!!errors.slug || undefined}
-            aria-describedby={describedBy("ev-slug", { hint: slugHint, error: err(errors.slug) })}
+            aria-describedby={describedBy(`${uid}-slug`, { hint: slugHint, error: err(errors.slug) })}
             {...register("slug", { onChange: () => (slugEdited.current = true) })}
           />
         </Field>
-        <Field id="ev-description" label={te.fields.description} optionalLabel={t.common.optional}>
-          <Textarea id="ev-description" maxLength={1000} {...register("description")} />
+        <Field id={`${uid}-description`} label={te.fields.description} optionalLabel={t.common.optional}>
+          <Textarea id={`${uid}-description`} maxLength={1000} {...register("description")} />
         </Field>
         <div className="grid gap-5 sm:grid-cols-2">
           {num("durationMinutes", te.fields.duration)}
-          <Field id="ev-interval" label={te.fields.interval}>
-            <select id="ev-interval" className={selectClasses} {...register("slotIntervalMinutes")}>
+          <Field id={`${uid}-interval`} label={te.fields.interval}>
+            <select id={`${uid}-interval`} className={selectClasses} {...register("slotIntervalMinutes")}>
               {SLOT_INTERVALS.map((n) => (
                 <option key={n} value={String(n)}>
                   {fill(t.common.minutes, { n })}
@@ -167,9 +169,7 @@ export function EventForm({ id, initial, baseUrl }: Props) {
           </div>
         </fieldset>
         <div className="flex items-center justify-between gap-3 rounded-control border border-border px-4 py-1">
-          <span id="ev-active-label" className="text-label text-ink-secondary">
-            {te.fields.active}
-          </span>
+          <span className="text-label text-ink-secondary">{te.fields.active}</span>
           <Switch
             checked={isActive}
             label={te.fields.active}
@@ -180,8 +180,8 @@ export function EventForm({ id, initial, baseUrl }: Props) {
       </Section>
 
       <Section title={te.sections.location}>
-        <Field id="ev-location" label={te.fields.location}>
-          <select id="ev-location" className={selectClasses} {...register("locationType")}>
+        <Field id={`${uid}-location`} label={te.fields.location}>
+          <select id={`${uid}-location`} className={selectClasses} {...register("locationType")}>
             {LOCATION_TYPES.map((l) => (
               <option key={l} value={l}>
                 {t.location[l]}
@@ -190,12 +190,12 @@ export function EventForm({ id, initial, baseUrl }: Props) {
           </select>
         </Field>
         {locationType === "in_person" ? (
-          <Field id="ev-address" label={te.fields.address} error={err(errors.address)}>
+          <Field id={`${uid}-address`} label={te.fields.address} error={err(errors.address)}>
             <Input
-              id="ev-address"
+              id={`${uid}-address`}
               autoComplete="street-address"
               aria-invalid={!!errors.address || undefined}
-              aria-describedby={describedBy("ev-address", { error: err(errors.address) })}
+              aria-describedby={describedBy(`${uid}-address`, { error: err(errors.address) })}
               {...register("address")}
             />
           </Field>
@@ -220,18 +220,18 @@ export function EventForm({ id, initial, baseUrl }: Props) {
             </fieldset>
             {phoneMode === "guest_calls" ? (
               <Field
-                id="ev-phone"
+                id={`${uid}-phone`}
                 label={te.fields.hostPhone}
                 hint={t.booking.form.phoneHint}
                 error={err(errors.hostPhone)}
               >
                 <Input
-                  id="ev-phone"
+                  id={`${uid}-phone`}
                   type="tel"
                   inputMode="tel"
                   autoComplete="tel"
                   aria-invalid={!!errors.hostPhone || undefined}
-                  aria-describedby={describedBy("ev-phone", {
+                  aria-describedby={describedBy(`${uid}-phone`, {
                     hint: t.booking.form.phoneHint,
                     error: err(errors.hostPhone),
                   })}
@@ -241,15 +241,15 @@ export function EventForm({ id, initial, baseUrl }: Props) {
             ) : null}
           </>
         ) : (
-          <Field id="ev-link" label={te.fields.link} error={err(errors.link)}>
+          <Field id={`${uid}-link`} label={te.fields.link} error={err(errors.link)}>
             <Input
-              id="ev-link"
+              id={`${uid}-link`}
               type="url"
               inputMode="url"
               spellCheck={false}
               placeholder="https://"
               aria-invalid={!!errors.link || undefined}
-              aria-describedby={describedBy("ev-link", { error: err(errors.link) })}
+              aria-describedby={describedBy(`${uid}-link`, { error: err(errors.link) })}
               {...register("link")}
             />
           </Field>
@@ -280,16 +280,20 @@ export function EventForm({ id, initial, baseUrl }: Props) {
                 className="flex flex-col gap-4 rounded-card-sm border border-border bg-surface-soft p-4"
               >
                 <div className="grid gap-4 sm:grid-cols-[1fr_200px]">
-                  <Field id={`q-${i}-label`} label={te.questions.label} error={err(qErrors?.label)}>
+                  <Field id={`${uid}-q-${i}-label`} label={te.questions.label} error={err(qErrors?.label)}>
                     <Input
-                      id={`q-${i}-label`}
+                      id={`${uid}-q-${i}-label`}
                       aria-invalid={!!qErrors?.label || undefined}
-                      aria-describedby={describedBy(`q-${i}-label`, { error: err(qErrors?.label) })}
+                      aria-describedby={describedBy(`${uid}-q-${i}-label`, { error: err(qErrors?.label) })}
                       {...register(`questions.${i}.label`)}
                     />
                   </Field>
-                  <Field id={`q-${i}-type`} label={te.questions.type}>
-                    <select id={`q-${i}-type`} className={selectClasses} {...register(`questions.${i}.type`)}>
+                  <Field id={`${uid}-q-${i}-type`} label={te.questions.type}>
+                    <select
+                      id={`${uid}-q-${i}-type`}
+                      className={selectClasses}
+                      {...register(`questions.${i}.type`)}
+                    >
                       {QUESTION_TYPES.map((qt) => (
                         <option key={qt} value={qt}>
                           {te.questions.types[qt]}
@@ -300,15 +304,15 @@ export function EventForm({ id, initial, baseUrl }: Props) {
                 </div>
                 {type === "single_choice" || type === "multi_choice" ? (
                   <Field
-                    id={`q-${i}-options`}
+                    id={`${uid}-q-${i}-options`}
                     label={te.questions.options}
                     hint={te.questions.optionsHint}
                     error={err(qErrors?.optionsText)}
                   >
                     <Textarea
-                      id={`q-${i}-options`}
+                      id={`${uid}-q-${i}-options`}
                       aria-invalid={!!qErrors?.optionsText || undefined}
-                      aria-describedby={describedBy(`q-${i}-options`, {
+                      aria-describedby={describedBy(`${uid}-q-${i}-options`, {
                         hint: te.questions.optionsHint,
                         error: err(qErrors?.optionsText),
                       })}
