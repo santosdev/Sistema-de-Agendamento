@@ -90,6 +90,20 @@ export function BookingFlow({ host, event, embed }: Props) {
       : ([...days.keys()][0] ?? null)
     : null;
 
+  // RN-75: inside the inline iframe, tell the parent page our height so it can grow without scrollbars.
+  useEffect(() => {
+    if (!embed || window.parent === window) return;
+    const post = () =>
+      window.parent.postMessage(
+        { type: "techresolute:resize", height: document.documentElement.scrollHeight },
+        "*",
+      );
+    const observer = new ResizeObserver(post);
+    observer.observe(document.body);
+    post();
+    return () => observer.disconnect();
+  }, [embed]);
+
   // Move focus to the new step heading (keyboard and screen reader users).
   // Waits for the exit animation (AnimatePresence mode="wait") before focusing.
   useEffect(() => {
