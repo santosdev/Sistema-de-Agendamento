@@ -37,3 +37,22 @@ test("cron routes reject calls without the secret", async ({ request }) => {
   expect((await request.get("/api/cron/demo-reset")).status()).toBe(401);
   expect((await request.get("/api/cron/maintenance")).status()).toBe(401);
 });
+
+test("forgot password is linked from login and the reset page needs the e-mail link", async ({ page }) => {
+  await page.goto("/login");
+  await page.locator("main:visible").getByRole("link", { name: "Esqueci minha senha" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Recuperar senha" })).toBeVisible();
+  await expect(page.locator("main:visible").getByLabel("E-mail")).toBeVisible();
+
+  await page.goto("/reset-password");
+  await expect(page).toHaveURL(/\/login\?error=link_invalid$/);
+  await expect(page.locator("main:visible").getByText("O link expirou")).toBeVisible();
+});
+
+test("shared links carry an Open Graph preview", async ({ page, request }) => {
+  await page.goto("/");
+  const image = await page.locator('meta[property="og:image"]').getAttribute("content");
+  expect(image).toMatch(/\/opengraph-image/);
+  const response = await request.get(new URL(image!).pathname);
+  expect(response.headers()["content-type"]).toBe("image/png");
+});

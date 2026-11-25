@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Confirme a troca de e-mail</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background: #f6f4fb;
+      font-family:
+        Inter,
+        Segoe UI,
+        Helvetica,
+        Arial,
+        sans-serif;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background: #f6f4fb; padding: 24px 12px"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            style="max-width: 560px; background: #ffffff; border: 1px solid #e7e3f1; border-radius: 20px"
+          >
+            <tr>
+              <td style="padding: 28px">
+                <p style="margin: 0 0 20px; color: #6d28d9; font-weight: 700; font-size: 15px">
+                  Tech Resolute
+                </p>
+                <h1 style="margin: 0 0 8px; color: #16131f; font-size: 22px; line-height: 28px">
+                  Confirme a troca de e-mail
+                </h1>
+                <p style="margin: 0; color: #3d3850; font-size: 15px; line-height: 22px">
+                  Recebemos um pedido para trocar o e-mail da sua conta de {{ .Email }} para {{ .NewEmail }}.
+                  Confirme para concluir.
+                </p>
+                <p style="margin: 24px 0 0">
+                  <a
+                    href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&amp;type=email_change&amp;next=/dashboard/profile%3Femail%3Dconfirmed"
+                    style="
+                      display: inline-block;
+                      background: #6d28d9;
+                      color: #ffffff;
+                      text-decoration: none;
+                      font-weight: 600;
+                      font-size: 14px;
+                      padding: 12px 20px;
+                      border-radius: 12px;
+                    "
+                    >Confirmar troca</a
+                  >
+                </p>
+                <p style="margin: 24px 0 0; color: #5b5670; font-size: 13px; line-height: 18px">
+                  O link vale por 1 hora. Se você não pediu esta troca, ignore esta mensagem e considere
+                  alterar sua senha.
+                </p>
+              </td>
+            </tr>
+          </table>
+          <p style="margin: 16px 0 0; color: #5b5670; font-size: 12px">Enviado pela Agenda Tech Resolute.</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

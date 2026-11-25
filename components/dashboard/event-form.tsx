@@ -7,6 +7,7 @@ import { useId, useMemo, useRef, useState, useTransition, type ReactNode } from 
 import { useFieldArray, useForm, type FieldError as RhfError } from "react-hook-form";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { controlClasses, describedBy, Field, Input, Textarea } from "@/components/ui/field";
 import { cn } from "@/lib/cn";
 import { archiveEventTypeAction, saveEventTypeAction, type DashboardResult } from "@/lib/dashboard/actions";
@@ -52,7 +53,7 @@ export function EventForm({ id, initial, baseUrl }: Props) {
   });
   const questions = useFieldArray({ control, name: "questions" });
   const [serverError, setServerError] = useState<string | null>(null);
-  const [saved, setSaved] = useState<string | null>(null);
+  const toast = useToast();
   const [archiveOpen, setArchiveOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const slugEdited = useRef(Boolean(id));
@@ -82,13 +83,12 @@ export function EventForm({ id, initial, baseUrl }: Props) {
       setServerError(errorText(result.error));
       return false;
     }
-    setSaved(message);
+    toast(message);
     return true;
   }
 
   const submit = handleSubmit(() => {
     setServerError(null);
-    setSaved(null);
     startTransition(async () => {
       const result = await saveEventTypeAction({ id, values: getValues() }).catch((): DashboardResult => ({
         ok: false,
@@ -106,7 +106,6 @@ export function EventForm({ id, initial, baseUrl }: Props) {
       {isSubmitted && Object.keys(errors).length > 0 && !serverError ? (
         <Alert>{t.dashboard.errors.invalid_input}</Alert>
       ) : null}
-      {saved ? <Alert tone="success">{saved}</Alert> : null}
 
       <Section title={te.sections.basics}>
         <Field id={`${uid}-title`} label={te.fields.title} error={err(errors.title)}>

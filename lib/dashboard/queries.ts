@@ -30,6 +30,40 @@ export type HostMeeting = {
 };
 
 const LIMIT = 200;
+export const MEETINGS_TABS: MeetingsTab[] = ["upcoming", "past", "cancelled"];
+
+/** The same filter for the list and the tab counters. */
+function byTab<
+  Q extends {
+    eq: (c: "status", v: "cancelled") => Q;
+    neq: (c: "status", v: "cancelled") => Q;
+    lt: (c: "end_at", v: string) => Q;
+    gte: (c: "end_at", v: string) => Q;
+  },
+>(query: Q, tab: MeetingsTab, now: string): Q {
+  if (tab === "cancelled") return query.eq("status", "cancelled");
+  if (tab === "past") return query.neq("status", "cancelled").lt("end_at", now);
+  return query.neq("status", "cancelled").gte("end_at", now);
+}
+
+/** How many meetings each tab has (head-only count queries, no rows transferred). */
+export async function getMeetingCounts(): Promise<Record<MeetingsTab, number>> {
+  const host = await getCurrentHost();
+  const supabase = await createClient();
+  const now = new Date().toISOString();
+  const counts = await Promise.all(
+    MEETINGS_TABS.map(async (tab) => {
+      const base = supabase
+        .from("bookings")
+        .select("id", { count: "exact", head: true })
+        .eq("host_id", host.id);
+      const { count, error } = await byTab(base, tab, now);
+      if (error) throw error;
+      return [tab, count ?? 0] as const;
+    }),
+  );
+  return Object.fromEntries(counts) as Record<MeetingsTab, number>;
+}
 
 /** Meetings of the signed-in host (RLS: own bookings only). */
 export async function getMeetings(tab: MeetingsTab): Promise<HostMeeting[]> {
@@ -37,7 +71,7 @@ export async function getMeetings(tab: MeetingsTab): Promise<HostMeeting[]> {
   const supabase = await createClient();
   const now = new Date().toISOString();
 
-  let query = supabase
+  const query = supabase
     .from("bookings")
     .select(
       "id, status, start_at, end_at, previous_start_at, event_title, location_type, location_value, phone_mode, guest_name, guest_email, guest_phone, guest_time_zone, answers, cancel_reason, cancelled_by, event_types(slug, color)",
@@ -45,12 +79,7 @@ export async function getMeetings(tab: MeetingsTab): Promise<HostMeeting[]> {
     .eq("host_id", host.id)
     .limit(LIMIT);
 
-  if (tab === "cancelled") query = query.eq("status", "cancelled").order("start_at", { ascending: false });
-  else if (tab === "past")
-    query = query.neq("status", "cancelled").lt("end_at", now).order("start_at", { ascending: false });
-  else query = query.neq("status", "cancelled").gte("end_at", now).order("start_at");
-
-  const { data, error } = await query;
+  const { data, error } = await byTab(query, tab, now).order("start_at", { ascending: tab === "upcoming" });
   if (error) throw error;
 
   return data.map((b) => ({

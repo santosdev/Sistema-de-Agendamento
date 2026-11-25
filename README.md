@@ -53,8 +53,9 @@ npm run dev
 | `RATE_LIMIT_SALT`, `CRON_SECRET` | textos aleatórios de 32+ caracteres (`openssl rand -base64 48`) |
 | `DEMO_USER_EMAIL`, `DEMO_USER_PASSWORD` | credenciais do anfitrião demo (senha com 12+ caracteres) |
 
-No Supabase, em **Authentication > URL Configuration**, inclua `<NEXT_PUBLIC_APP_URL>/auth/callback` nas
-Redirect URLs (link de acesso por e-mail e confirmação de cadastro).
+No Supabase, em **Authentication > URL Configuration**, defina a Site URL como `<NEXT_PUBLIC_APP_URL>` e inclua
+`<NEXT_PUBLIC_APP_URL>/auth/callback` nas Redirect URLs. Os e-mails de login (cadastro, link de acesso, recuperação e
+troca de e-mail) têm modelos em português: veja [docs/EMAILS-AUTH.md](docs/EMAILS-AUTH.md).
 
 **Limitação do Resend:** sem domínio verificado, os e-mails só chegam ao endereço dono da conta Resend. A reserva
 funciona normalmente mesmo quando o envio falha.
@@ -72,6 +73,9 @@ funciona normalmente mesmo quando o envio falha.
 | `npm run db:push` / `npm run db:types` | aplica migrations / gera os tipos do banco |
 | `npm run demo:reset` | recria o anfitrião demo com datas relativas a hoje |
 | `npm run format` | Prettier com ordenação de classes do Tailwind |
+
+**CI:** a cada push na `main` e em cada pull request, o GitHub Actions (`.github/workflows/ci.yml`) roda formatação,
+lint, tipos, testes unitários e de banco e o build. Os testes E2E ficam de fora porque precisam do banco real.
 
 **Testes E2E:** usam o perfil demo do banco configurado no `.env.local` e criam reservas de verdade (removidas no
 reset do demo). O rate limit permite 5 ações a cada 10 minutos por IP, então espere 10 minutos entre duas execuções

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { publicEnv } from "@/lib/env/public";
 import { serverEnv } from "@/lib/env/server";
 import { isValidTimeZone } from "@/lib/scheduling/time";
+import { createPublicClient } from "@/lib/supabase/public";
 import { createClient } from "@/lib/supabase/server";
 import { safeNext } from "./session";
 
@@ -15,6 +16,11 @@ export type AuthErrorCode =
   | "weak_password"
   | "rate_limited"
   | "invalid_input"
+  | "same_password"
+  | "wrong_password"
+  | "same_email"
+  | "demo_locked"
+  | "not_authenticated"
   | "unknown";
 
 export type AuthResult = { ok: true; needsConfirmation?: boolean } | { ok: false; error: AuthErrorCode };
@@ -33,6 +39,8 @@ function toAuthError(error: { code?: string; message?: string } | null): AuthErr
       return "user_exists";
     case "weak_password":
       return "weak_password";
+    case "same_password":
+      return "same_password";
     case "over_request_rate_limit":
     case "over_email_send_rate_limit":
       return "rate_limited";
@@ -118,6 +126,91 @@ export async function demoSignInAction(): Promise<AuthResult> {
 
 export async function signOutAction(): Promise<void> {
   const supabase = await createClient();
-  await supabase.auth.signOut();
+  // Local scope: only this browser. The demo account is shared, so a global sign-out would
+  // end every other visitor's session.
+  await supabase.auth.signOut({ scope: "local" });
   redirect("/login");
+}
+
+/**
+ * Forgot password. Always answers ok, so the form does not reveal which addresses have an account.
+ * The link opens /auth/callback, which starts a recovery session and sends the user to /reset-password.
+ */
+export async function requestPasswordResetAction(input: unknown): Promise<AuthResult> {
+  const parsed = z.object({ email }).safeParse(input);
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.email, {
+    redirectTo: callbackUrl("/reset-password"),
+  });
+  if (error && toAuthError(error) === "rate_limited") return { ok: false, error: "rate_limited" };
+  return { ok: true };
+}
+
+/** The signed-in account and whether it is the demo host (RN-70: its credentials never change). */
+async function currentAccount() {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  const user = data.user;
+  if (!user?.email) return { supabase, user: null, isDemo: false } as const;
+  const { data: profile } = await supabase.from("profiles").select("is_seed").eq("id", user.id).maybeSingle();
+  return { supabase, user: { id: user.id, email: user.email }, isDemo: profile?.is_seed ?? false } as const;
+}
+
+/** Sets a new password after the recovery link (/reset-password). */
+export async function setNewPasswordAction(input: unknown): Promise<AuthResult> {
+  const parsed = z.object({ password }).safeParse(input);
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  const { supabase, user, isDemo } = await currentAccount();
+  if (!user) return { ok: false, error: "not_authenticated" };
+  if (isDemo) return { ok: false, error: "demo_locked" };
+
+  const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
+  if (error) return { ok: false, error: toAuthError(error) };
+  redirect("/dashboard?password=updated");
+}
+
+/** Checks a password on a cookie-less client, so the browser session is not replaced. */
+async function passwordMatches(address: string, value: string): Promise<boolean> {
+  const { error } = await createPublicClient().auth.signInWithPassword({ email: address, password: value });
+  return !error;
+}
+
+/** Profile > Account: changes the password. The current one is asked again. */
+export async function changePasswordAction(input: unknown): Promise<AuthResult> {
+  const parsed = z
+    .object({ currentPassword: z.string().min(1).max(72), newPassword: password })
+    .safeParse(input);
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  const { supabase, user, isDemo } = await currentAccount();
+  if (!user) return { ok: false, error: "not_authenticated" };
+  if (isDemo) return { ok: false, error: "demo_locked" };
+  if (!(await passwordMatches(user.email, parsed.data.currentPassword))) {
+    return { ok: false, error: "wrong_password" };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password: parsed.data.newPassword });
+  if (error) return { ok: false, error: toAuthError(error) };
+  return { ok: true };
+}
+
+/**
+ * Profile > Account: starts an e-mail change. Supabase sends a confirmation link
+ * (to both addresses when "secure email change" is on); the change applies after it.
+ */
+export async function changeEmailAction(input: unknown): Promise<AuthResult> {
+  const parsed = z.object({ email }).safeParse(input);
+  if (!parsed.success) return { ok: false, error: "invalid_input" };
+  const { supabase, user, isDemo } = await currentAccount();
+  if (!user) return { ok: false, error: "not_authenticated" };
+  if (isDemo) return { ok: false, error: "demo_locked" };
+  if (parsed.data.email === user.email.toLowerCase()) return { ok: false, error: "same_email" };
+
+  const { error } = await supabase.auth.updateUser(
+    { email: parsed.data.email },
+    { emailRedirectTo: callbackUrl("/dashboard/profile?email=confirmed") },
+  );
+  if (error) return { ok: false, error: toAuthError(error) };
+  return { ok: true, needsConfirmation: true };
 }

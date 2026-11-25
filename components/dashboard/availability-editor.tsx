@@ -4,6 +4,7 @@ import { CalendarOff, Plus, Trash2 } from "lucide-react";
 import { useState, useTransition, type ReactNode } from "react";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { controlClasses } from "@/components/ui/field";
 import { cn } from "@/lib/cn";
 import {
@@ -57,20 +58,19 @@ function Card({ title, hint, children }: { title: string; hint: string; children
 function useAction() {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const toast = useToast();
   function run(action: () => Promise<DashboardResult>, message: string, after?: () => void) {
     setError(null);
-    setSuccess(null);
     startTransition(async () => {
       const r = await action().catch((): DashboardResult => ({ ok: false, error: "unknown" }));
       if (!r.ok) setError(errorText(r.error));
       else {
-        setSuccess(message);
+        toast(message);
         after?.();
       }
     });
   }
-  return { pending, error, setError, success, run };
+  return { pending, error, setError, run };
 }
 
 /** RN-20 to RN-24: zero or more intervals per weekday, no overlaps. */
@@ -83,7 +83,7 @@ function WeeklyHours({ timeZone, initial }: { timeZone: string; initial: WeeklyI
       initial.filter((r) => r.weekday === d).map(({ start, end }) => ({ start, end })),
     ),
   );
-  const { pending, error, setError, success, run } = useAction();
+  const { pending, error, setError, run } = useAction();
 
   const update = (day: number, next: Interval[]) =>
     setByDay((all) => all.map((list, i) => (i === day ? next : list)));
@@ -102,7 +102,6 @@ function WeeklyHours({ timeZone, initial }: { timeZone: string; initial: WeeklyI
   return (
     <Card title={ta.weekly} hint={fill(ta.weeklyHint, { zone: timeZoneName(timeZone) })}>
       {error ? <Alert>{error}</Alert> : null}
-      {success ? <Alert tone="success">{success}</Alert> : null}
       <ul className="flex flex-col divide-y divide-divider">
         {byDay.map((list, day) => {
           const name = days[day].long.charAt(0).toUpperCase() + days[day].long.slice(1);
@@ -189,7 +188,7 @@ function Overrides({ overrides, today }: { overrides: HostOverride[]; today: str
   const [endDate, setEndDate] = useState(today);
   const [special, setSpecial] = useState(false);
   const [interval, setSpecialHours] = useState<Interval>({ start: "09:00", end: "12:00" });
-  const { pending, error, setError, success, run } = useAction();
+  const { pending, error, setError, run } = useAction();
 
   function add() {
     if (!startDate || !endDate || endDate < startDate || addDays(startDate, 59) < endDate) {
@@ -206,7 +205,6 @@ function Overrides({ overrides, today }: { overrides: HostOverride[]; today: str
   return (
     <Card title={ta.overrides} hint={ta.overridesHint}>
       {error ? <Alert>{error}</Alert> : null}
-      {success ? <Alert tone="success">{success}</Alert> : null}
 
       <div className="flex flex-col gap-4 rounded-card-sm border border-border bg-surface-soft p-4">
         <div className="flex flex-wrap gap-4">

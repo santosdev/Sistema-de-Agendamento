@@ -282,13 +282,25 @@
       //   "sender_name": "Admin"
       // },
 
-      // Uncomment to customize email template
-      // "template": {
-      //   "invite": {
-      //     "subject": "You have been invited",
-      //     "content_path": "./supabase/templates/invite.html"
-      //   }
-      // },
+      // pt-BR templates. For the hosted project, paste them in the dashboard (docs/EMAILS-AUTH.md).
+      "template": {
+        "confirmation": {
+          "subject": "Confirme seu e-mail",
+          "content_path": "./supabase/templates/confirmation.html",
+        },
+        "magic_link": {
+          "subject": "Seu link de acesso",
+          "content_path": "./supabase/templates/magic_link.html",
+        },
+        "recovery": {
+          "subject": "Crie uma nova senha",
+          "content_path": "./supabase/templates/recovery.html",
+        },
+        "email_change": {
+          "subject": "Confirme a troca de e-mail",
+          "content_path": "./supabase/templates/email_change.html",
+        },
+      },
 
       // Uncomment to customize notification email template
       // "notification": {
