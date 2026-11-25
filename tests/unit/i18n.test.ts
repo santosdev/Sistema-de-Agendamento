@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LOCALES, getDateLocale, getMessages } from "@/lib/i18n";
+import { LOCALES, fill, getMessages, weekStartsOn } from "@/lib/i18n";
 
 const EM_DASH = String.fromCharCode(0x2014);
 
@@ -30,6 +30,11 @@ describe("i18n", () => {
   });
 
   it("pt-BR calendar weeks start on Sunday", () => {
-    expect(getDateLocale("pt-BR").options?.weekStartsOn).toBe(0);
+    expect(weekStartsOn("pt-BR")).toBe(0);
+  });
+
+  it("fills placeholders and keeps unknown ones", () => {
+    expect(fill("Passo {step} de 3", { step: 2 })).toBe("Passo 2 de 3");
+    expect(fill("Olá {name}", {})).toBe("Olá {name}");
   });
 });
