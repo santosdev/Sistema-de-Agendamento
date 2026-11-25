@@ -8,3 +8,4 @@ components/brand/logo-r-path.ts
 app/icon.svg
 public
 *.md
+lib/supabase/database.types.ts

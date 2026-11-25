@@ -7,9 +7,12 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["tests/unit/**/*.test.ts", "lib/**/*.test.ts"],
+    include: ["tests/unit/**/*.test.ts", "tests/db/**/*.test.ts", "lib/**/*.test.ts"],
     // Slot generation must not depend on the machine's time zone.
     env: { TZ: "UTC" },
+    // Database tests boot an in-memory Postgres (PGlite) per file.
+    testTimeout: 30_000,
+    hookTimeout: 60_000,
     coverage: {
       provider: "v8",
       include: ["lib/**/*.ts"],

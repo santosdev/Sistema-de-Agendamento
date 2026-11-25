@@ -30,6 +30,7 @@ const eslintConfig = defineConfig([
     "playwright-report/**",
     "test-results/**",
     "components/brand/logo-r-path.ts",
+    "lib/supabase/database.types.ts",
   ]),
 ]);
 
