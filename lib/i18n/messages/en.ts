@@ -391,4 +391,64 @@ export const en: Messages = {
       demoLocked: "In demo mode the username cannot be changed.",
     },
   },
+  email: {
+    footer: "Sent by Tech Resolute Scheduling.",
+    labels: {
+      event: "Event",
+      when: "Date and time",
+      previous: "Previous time",
+      location: "Location",
+      guest: "Guest",
+      email: "Email",
+      phone: "Phone",
+      reason: "Reason",
+    },
+    when: "{date}, {start} to {end} ({zone})",
+    manage: "Cancel or reschedule",
+    manageHint:
+      "Use this link if you need to change something. Do not share it, it gives access to your meeting.",
+    bookAgain: "Book a new time",
+    openDashboard: "Open the dashboard",
+    icsHint: "The invite is attached. Open the file to add it to your calendar.",
+    guestCreated: {
+      subject: "Meeting confirmed: {event} with {host}",
+      title: "Meeting confirmed",
+      intro: "Hi {name}. Your meeting with {host} is booked.",
+    },
+    hostCreated: {
+      subject: "New meeting: {guest} · {date}",
+      title: "New meeting booked",
+      intro: "{guest} booked {event} with you.",
+    },
+    guestCancelledGuest: {
+      subject: "Meeting cancelled: {event} with {host}",
+      title: "Meeting cancelled",
+      intro: "Hi {name}. Your meeting with {host} is cancelled.",
+    },
+    guestCancelledHost: {
+      subject: "Meeting cancelled by {guest}",
+      title: "Meeting cancelled",
+      intro: "{guest} cancelled {event}.",
+    },
+    hostCancelledGuest: {
+      subject: "Meeting cancelled: {event} with {host}",
+      title: "Meeting cancelled",
+      intro: "Hi {name}. {host} had to cancel the meeting. You can pick another time.",
+    },
+    guestRescheduledGuest: {
+      subject: "Meeting rescheduled: {event} with {host}",
+      title: "Meeting rescheduled",
+      intro: "Hi {name}. Your meeting with {host} has a new time.",
+    },
+    guestRescheduledHost: {
+      subject: "Meeting rescheduled by {guest}",
+      title: "Meeting rescheduled",
+      intro: "{guest} changed the time of {event}.",
+    },
+    hostRescheduledGuest: {
+      subject: "New time: {event} with {host}",
+      title: "Meeting rescheduled",
+      intro: "Hi {name}. {host} changed the time of your meeting.",
+    },
+  },
 };
