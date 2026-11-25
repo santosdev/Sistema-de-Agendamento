@@ -1,0 +1,133 @@
+/*
+ * Design tokens (Tailwind v4). Source of truth: DESIGN.md.
+ * Imported by app/globals.css right after `@import "tailwindcss";`.
+ */
+
+@theme {
+  /* Drop Tailwind's default palette so only brand tokens exist. */
+  --color-*: initial;
+
+  --color-white: #ffffff;
+
+  /* Surfaces */
+  --color-bg: #f6f4fb;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fcfbfe;
+
+  /* Lines */
+  --color-border: #e7e3f1;
+  --color-divider: #eeeaf5;
+  --color-border-input: #8b85a1;
+
+  /* Text */
+  --color-ink: #16131f;
+  --color-ink-secondary: #3d3850;
+  --color-ink-muted: #5b5670;
+  --color-ink-disabled: #a39fb5;
+
+  /* Brand */
+  --color-brand: #6d28d9;
+  --color-brand-hover: #5b21b6;
+  --color-brand-soft: #ede7fb;
+  --color-brand-soft-ink: #3b1a86;
+  --color-slot-selected: #f3eeff;
+
+  /* Dashboard sidebar */
+  --color-sidebar: #16131f;
+  --color-sidebar-active: #2a2438;
+  --color-sidebar-ink: #c9c3da;
+  --color-sidebar-border: #3a3348;
+  --color-focus-on-dark: #a78bfa;
+
+  /* Logo lockup bar (light variant) */
+  --color-logo-bar: #cfc8e0;
+
+  /* Status */
+  --color-success-soft: #e6f4ea;
+  --color-success-ink: #1e6b34;
+  --color-warning-soft: #fff1dc;
+  --color-warning-ink: #8a4b00;
+  --color-neutral-soft: #f1eef6;
+  --color-neutral-ink: #5b5670;
+  --color-danger: #b42318;
+  --color-danger-soft: #fef3f2;
+
+  /* Event type palette (all >= 4.5:1 on white) */
+  --color-event-violet: #6d28d9;
+  --color-event-blue: #2563eb;
+  --color-event-teal: #0f766e;
+  --color-event-green: #15803d;
+  --color-event-amber: #b45309;
+  --color-event-rose: #be123c;
+  --color-event-fuchsia: #c026d3;
+  --color-event-slate: #475569;
+
+  /* Type scale */
+  --text-display: 2rem;
+  --text-display--line-height: 2.375rem;
+  --text-display--font-weight: 700;
+  --text-display--letter-spacing: -0.01em;
+
+  --text-title: 1.375rem;
+  --text-title--line-height: 1.75rem;
+  --text-title--font-weight: 600;
+  --text-title--letter-spacing: -0.01em;
+
+  --text-heading: 1.0625rem;
+  --text-heading--line-height: 1.5rem;
+  --text-heading--font-weight: 600;
+  --text-heading--letter-spacing: -0.01em;
+
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.375rem;
+
+  --text-label: 0.875rem;
+  --text-label--line-height: 1.25rem;
+  --text-label--font-weight: 500;
+
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.125rem;
+
+  /* Sizing (h-touch, h-control, h-control-lg, min-h-*, size-*) */
+  --spacing-touch: 2.75rem;
+  --spacing-control: 3rem;
+  --spacing-control-lg: 3.25rem;
+
+  /* Radius */
+  --radius-card: 20px;
+  --radius-card-sm: 18px;
+  --radius-control: 12px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgb(22 19 31 / 0.04), 0 8px 24px -12px rgb(22 19 31 / 0.08);
+  --shadow-pop: 0 2px 4px rgb(22 19 31 / 0.06), 0 16px 40px -16px rgb(22 19 31 / 0.18);
+
+  /* Easing */
+  --ease-out-soft: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-soft: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Fonts come from next/font CSS variables set on <html>. */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Mobile sizes for the two largest type tokens. */
+@layer base {
+  @media (width < 40rem) {
+    :root {
+      --text-display: 1.625rem;
+      --text-display--line-height: 2rem;
+      --text-title: 1.25rem;
+      --text-title--line-height: 1.625rem;
+    }
+  }
+}
+
+/* Motion durations (Tailwind has no duration namespace; use duration-(--duration-base)). */
+:root {
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+}
