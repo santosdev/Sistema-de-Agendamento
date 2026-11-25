@@ -5,6 +5,9 @@ const baseURL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: "./e2e",
+  // Removes "E2E ..." event types left on the demo host by failed runs.
+  globalSetup: "./e2e/cleanup.ts",
+  globalTeardown: "./e2e/cleanup.ts",
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
