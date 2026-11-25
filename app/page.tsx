@@ -11,7 +11,11 @@ export default function HomePage() {
 
   return (
     <>
-      <SiteHeader width="max-w-[720px]" />
+      <SiteHeader width="max-w-[720px]">
+        <ButtonLink href="/login" variant="ghost" size="sm">
+          {t.auth.signIn}
+        </ButtonLink>
+      </SiteHeader>
       <main id="main" className="mx-auto flex w-full max-w-[720px] flex-1 flex-col px-4 py-12 sm:px-6">
         <section className="flex flex-col items-start gap-4 rounded-card border border-border bg-surface p-5 shadow-card sm:p-7">
           <h1 className="font-display text-title text-ink">{t.home.title}</h1>

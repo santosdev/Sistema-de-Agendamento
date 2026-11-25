@@ -14,8 +14,10 @@ type Params = {
   eventSlug: string;
   timeZone: string | null;
   month: YearMonth;
-  /** Rescheduling: exclude this booking from the busy times. */
+  /** Guest rescheduling: exclude this booking from the busy times. */
   token?: string;
+  /** Host rescheduling (signed in): same, by booking id. */
+  bookingId?: string;
   /** Called when a month arrives from the network (not from the cache). */
   onLoaded?: (days: DaySlots[]) => void;
 };
@@ -25,7 +27,7 @@ type Params = {
  * Raw slots are cached per month range, so switching months or time zones back
  * and forth does not refetch.
  */
-export function useMonthSlots({ username, eventSlug, timeZone, month, token, onLoaded }: Params) {
+export function useMonthSlots({ username, eventSlug, timeZone, month, token, bookingId, onLoaded }: Params) {
   const cache = useRef(new Map<string, string[]>());
   const onLoadedRef = useRef(onLoaded);
   useEffect(() => {
@@ -64,6 +66,7 @@ export function useMonthSlots({ username, eventSlug, timeZone, month, token, onL
       to: range.end.toISOString(),
     });
     if (token) query.set("token", token);
+    if (bookingId) query.set("booking", bookingId);
 
     fetch(`/api/slots?${query}`, { signal: controller.signal })
       .then(async (res) => {
@@ -83,7 +86,7 @@ export function useMonthSlots({ username, eventSlug, timeZone, month, token, onL
       });
 
     return () => controller.abort();
-  }, [range, timeZone, username, eventSlug, token, version]);
+  }, [range, timeZone, username, eventSlug, token, bookingId, version]);
 
   /** Drops the cache and reloads (after "slot taken" or a retry). */
   const reload = useCallback(() => {

@@ -101,10 +101,22 @@ export const getPublicEvent = cache(async (hostId: string, slug: string): Promis
   return data ? toPublicEvent(data as EventRow) : null;
 });
 
-/** Everything the slot generator needs for one event. */
-export async function getSlotInputs(hostId: string, eventId: string, from: Date, to: Date) {
-  const db = createPublicClient();
+/**
+ * Everything the slot generator needs for one event.
+ * `trusted`: the caller already verified the signed-in host owns this data (host reschedule).
+ * It reads with the secret key, so private hosts and inactive events still work.
+ */
+export async function getSlotInputs(
+  hostId: string,
+  eventId: string,
+  from: Date,
+  to: Date,
+  { trusted = false }: { trusted?: boolean } = {},
+) {
+  const db = trusted ? createAdminClient() : createPublicClient();
   const DAY = 86_400_000;
+  const busyFrom = new Date(from.getTime() - DAY).toISOString();
+  const busyTo = new Date(to.getTime() + DAY).toISOString();
 
   const [event, rules, overrides, busy] = await Promise.all([
     db
@@ -123,11 +135,15 @@ export async function getSlotInputs(hostId: string, eventId: string, from: Date,
       .gte("date", new Date(from.getTime() - DAY).toISOString().slice(0, 10))
       .lte("date", new Date(to.getTime() + DAY).toISOString().slice(0, 10)),
     // One extra day on each side: buffers and the host-day daily limit.
-    db.rpc("get_busy_ranges", {
-      p_host_id: hostId,
-      p_from: new Date(from.getTime() - DAY).toISOString(),
-      p_to: new Date(to.getTime() + DAY).toISOString(),
-    }),
+    trusted
+      ? db
+          .from("bookings")
+          .select("event_type_id, start_at, end_at, blocked_from, blocked_until")
+          .eq("host_id", hostId)
+          .neq("status", "cancelled")
+          .lt("blocked_from", busyTo)
+          .gt("blocked_until", busyFrom)
+      : db.rpc("get_busy_ranges", { p_host_id: hostId, p_from: busyFrom, p_to: busyTo }),
   ]);
 
   for (const result of [event, rules, overrides, busy]) {

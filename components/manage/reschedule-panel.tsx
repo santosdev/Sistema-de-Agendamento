@@ -12,7 +12,11 @@ import { fill, getMessages } from "@/lib/i18n";
 import { localDateOf, type LocalDate } from "@/lib/scheduling/time";
 
 type Props = {
-  token: string;
+  /** Guest flow: the manage token. Host flow: the booking id (signed in). */
+  token?: string;
+  bookingId?: string;
+  /** Overrides the default heading (host flow names the guest). */
+  title?: string;
   username: string;
   eventSlug: string;
   /** Current start of the booking, shown so the guest knows what is being replaced. */
@@ -32,7 +36,7 @@ const monthOf = (date: LocalDate): YearMonth => ({
 
 /** Picks a new time for an existing booking (RN-52 to RN-55). */
 export function ReschedulePanel(props: Props) {
-  const { token, username, eventSlug, currentStartAt, timeZone, pending, error } = props;
+  const { token, bookingId, username, eventSlug, currentStartAt, timeZone, pending, error } = props;
   const t = getMessages();
   const [now] = useState(() => new Date());
   const today = localDateOf(now, timeZone);
@@ -40,11 +44,16 @@ export function ReschedulePanel(props: Props) {
   const [selectedDate, setSelectedDate] = useState<LocalDate | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
 
-  const { state, reload } = useMonthSlots({ username, eventSlug, timeZone, month, token });
-  const days = useMemo(
-    () => (state.status === "ready" ? new Map(state.days.map((d) => [d.date, d.slots])) : null),
-    [state],
-  );
+  const { state, reload } = useMonthSlots({ username, eventSlug, timeZone, month, token, bookingId });
+  // The booking does not block itself, so its current time comes back as free: hide it.
+  const days = useMemo(() => {
+    if (state.status !== "ready") return null;
+    const current = new Date(currentStartAt).getTime();
+    const entries = state.days
+      .map((d) => [d.date, d.slots.filter((slot) => slot.getTime() !== current)] as const)
+      .filter(([, slots]) => slots.length > 0);
+    return new Map(entries);
+  }, [state, currentStartAt]);
 
   // Shown day: the guest's choice when it has slots, else the first free day of the month.
   const activeDate = days
@@ -62,7 +71,7 @@ export function ReschedulePanel(props: Props) {
             tabIndex={-1}
             className="font-display text-heading text-ink focus:outline-none"
           >
-            {t.manage.rescheduleFlow.title}
+            {props.title ?? t.manage.rescheduleFlow.title}
           </h2>
           <p className="text-caption text-ink-muted">
             {fill(t.manage.rescheduleFlow.current, {

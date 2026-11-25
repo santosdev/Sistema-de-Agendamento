@@ -4,6 +4,8 @@ import { publicEnv } from "@/lib/env/public";
 
 /** Routes that require a signed-in host. */
 const PROTECTED_PREFIXES = ["/dashboard"];
+/** Auth pages a signed-in host does not need. */
+const GUEST_ONLY = ["/login", "/signup"];
 
 /**
  * Refreshes the Supabase session on every matched request and writes the
@@ -52,6 +54,13 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     url.search = `?next=${encodeURIComponent(pathname)}`;
+    return NextResponse.redirect(url);
+  }
+
+  if (isSignedIn && GUEST_ONLY.includes(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/dashboard";
+    url.search = "";
     return NextResponse.redirect(url);
   }
 
