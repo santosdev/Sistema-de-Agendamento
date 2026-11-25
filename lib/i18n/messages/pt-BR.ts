@@ -393,6 +393,65 @@ export const ptBR = {
       demoLocked: "No modo demonstração o usuário não pode ser alterado.",
     },
   },
+  email: {
+    footer: "Enviado pela Agenda Tech Resolute.",
+    labels: {
+      event: "Evento",
+      when: "Data e horário",
+      previous: "Horário anterior",
+      location: "Local",
+      guest: "Convidado",
+      email: "E-mail",
+      phone: "Telefone",
+      reason: "Motivo",
+    },
+    when: "{date}, {start} a {end} ({zone})",
+    manage: "Cancelar ou remarcar",
+    manageHint: "Use este link se precisar mudar algo. Não compartilhe, ele dá acesso à sua reunião.",
+    bookAgain: "Agendar novo horário",
+    openDashboard: "Abrir o painel",
+    icsHint: "O convite está anexado. Abra o arquivo para adicionar ao seu calendário.",
+    guestCreated: {
+      subject: "Reunião confirmada: {event} com {host}",
+      title: "Reunião confirmada",
+      intro: "Olá, {name}. Sua reunião com {host} está marcada.",
+    },
+    hostCreated: {
+      subject: "Nova reunião: {guest} · {date}",
+      title: "Nova reunião marcada",
+      intro: "{guest} agendou {event} com você.",
+    },
+    guestCancelledGuest: {
+      subject: "Reunião cancelada: {event} com {host}",
+      title: "Reunião cancelada",
+      intro: "Olá, {name}. Confirmamos o cancelamento da sua reunião com {host}.",
+    },
+    guestCancelledHost: {
+      subject: "Reunião cancelada por {guest}",
+      title: "Reunião cancelada",
+      intro: "{guest} cancelou {event}.",
+    },
+    hostCancelledGuest: {
+      subject: "Reunião cancelada: {event} com {host}",
+      title: "Reunião cancelada",
+      intro: "Olá, {name}. {host} precisou cancelar a reunião. Se quiser, escolha outro horário.",
+    },
+    guestRescheduledGuest: {
+      subject: "Reunião remarcada: {event} com {host}",
+      title: "Reunião remarcada",
+      intro: "Olá, {name}. Sua reunião com {host} mudou de horário.",
+    },
+    guestRescheduledHost: {
+      subject: "Reunião remarcada por {guest}",
+      title: "Reunião remarcada",
+      intro: "{guest} mudou o horário de {event}.",
+    },
+    hostRescheduledGuest: {
+      subject: "Novo horário: {event} com {host}",
+      title: "Reunião remarcada",
+      intro: "Olá, {name}. {host} mudou o horário da sua reunião.",
+    },
+  },
 } as const;
 
 /** Same shape as pt-BR, any string values. */

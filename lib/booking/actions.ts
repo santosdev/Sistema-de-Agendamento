@@ -1,5 +1,7 @@
 "use server";
 
+import { after } from "next/server";
+import { notifyBooking } from "@/lib/email/notify";
 import { getMessages } from "@/lib/i18n";
 import { isValidTimeZone } from "@/lib/scheduling/time";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -107,6 +109,7 @@ async function createBooking(input: unknown): Promise<CreateBookingResult> {
   }
 
   const created = data[0];
+  after(() => notifyBooking("created", created.booking_id, created.manage_token));
   const { data: booking } = await db
     .from("bookings")
     .select("location_value")
@@ -136,7 +139,7 @@ async function cancelBooking(input: unknown): Promise<ManageResult> {
   if (!request.success) return { ok: false, error: "booking_not_found" };
   if (!(await manageAllowed())) return { ok: false, error: "rate_limited" };
 
-  const { error } = await createAdminClient().rpc("cancel_booking_by_token", {
+  const { data, error } = await createAdminClient().rpc("cancel_booking_by_token", {
     p_token: request.data.token,
     p_reason: request.data.reason ?? "",
   });
@@ -146,6 +149,8 @@ async function cancelBooking(input: unknown): Promise<ManageResult> {
     if (!code) console.error("cancel_booking_by_token failed", error);
     return { ok: false, error: toManageError(code) };
   }
+  const bookingId = data?.[0]?.booking_id;
+  if (bookingId) after(() => notifyBooking("guest_cancelled", bookingId, request.data.token));
   return { ok: true };
 }
 
@@ -155,7 +160,7 @@ async function rescheduleBooking(input: unknown): Promise<ManageResult> {
   if (!request.success) return { ok: false, error: "booking_not_found" };
   if (!(await manageAllowed())) return { ok: false, error: "rate_limited" };
 
-  const { error } = await createAdminClient().rpc("reschedule_booking_by_token", {
+  const { data, error } = await createAdminClient().rpc("reschedule_booking_by_token", {
     p_token: request.data.token,
     p_new_start_at: request.data.startAt,
   });
@@ -165,5 +170,7 @@ async function rescheduleBooking(input: unknown): Promise<ManageResult> {
     if (!code) console.error("reschedule_booking_by_token failed", error);
     return { ok: false, error: toManageError(code) };
   }
+  const bookingId = data?.[0]?.booking_id;
+  if (bookingId) after(() => notifyBooking("guest_rescheduled", bookingId, request.data.token));
   return { ok: true };
 }

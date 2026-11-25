@@ -1,6 +1,8 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { after } from "next/server";
+import { notifyBooking } from "@/lib/email/notify";
 import { z } from "zod";
 import { dbErrorCode, toManageError, type ManageErrorCode } from "@/lib/booking/errors";
 import { getMessages } from "@/lib/i18n";
@@ -57,6 +59,7 @@ export async function hostCancelBookingAction(input: unknown): Promise<Dashboard
     p_reason: parsed.data.reason ?? "",
   });
   if (error) return { ok: false, error: toDashboardError(error, "host_cancel_booking") };
+  after(() => notifyBooking("host_cancelled", parsed.data.bookingId));
   refresh();
   return { ok: true };
 }
@@ -73,6 +76,7 @@ export async function hostRescheduleBookingAction(input: unknown): Promise<Dashb
     p_new_start_at: parsed.data.startAt,
   });
   if (error) return { ok: false, error: toDashboardError(error, "host_reschedule_booking") };
+  after(() => notifyBooking("host_rescheduled", parsed.data.bookingId));
   refresh();
   return { ok: true };
 }
