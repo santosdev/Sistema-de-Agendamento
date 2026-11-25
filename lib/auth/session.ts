@@ -55,3 +55,12 @@ export const getCurrentHost = cache(async (): Promise<Host> => {
 export function safeNext(value: unknown, fallback = "/dashboard"): string {
   return typeof value === "string" && value.startsWith("/") && !value.startsWith("//") ? value : fallback;
 }
+
+/** Sign-in e-mail of the current user and a pending change, if any (Profile > Account). */
+export async function getAccountEmail(): Promise<{ email: string; pendingEmail: string | null }> {
+  await connection();
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) redirect("/login");
+  return { email: data.user.email ?? "", pendingEmail: data.user.new_email ?? null };
+}

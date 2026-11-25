@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Lint, tipos, testes e build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Placeholders: the build and the tests never call Supabase or Resend.
+    # The E2E suite (Playwright) needs the real database and runs locally.
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci
+      NEXT_PUBLIC_APP_URL: https://agenda.example.com
+      SUPABASE_SECRET_KEY: sb_secret_ci
+      RESEND_API_KEY: re_ci
+      EMAIL_FROM: "Agenda Tech Resolute <onboarding@resend.dev>"
+      RATE_LIMIT_SALT: ci-rate-limit-salt-with-at-least-32-characters
+      CRON_SECRET: ci-cron-secret-with-at-least-32-characters-ok
+      DEMO_USER_EMAIL: demo@example.com
+      DEMO_USER_PASSWORD: ci-demo-password
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Formatação
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Tipos
+        run: npm run typecheck
+
+      - name: Testes (unidade e banco em PGlite)
+        run: npm run test
+
+      - name: Cache do build
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-${{ hashFiles('app/**', 'components/**', 'lib/**') }}
+          restore-keys: next-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
+
+      - name: Build
+        run: npm run build

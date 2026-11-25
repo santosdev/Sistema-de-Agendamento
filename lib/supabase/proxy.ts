@@ -5,7 +5,7 @@ import { publicEnv } from "@/lib/env/public";
 /** Routes that require a signed-in host. */
 const PROTECTED_PREFIXES = ["/dashboard"];
 /** Auth pages a signed-in host does not need. */
-const GUEST_ONLY = ["/login", "/signup"];
+const GUEST_ONLY = ["/login", "/signup", "/forgot-password"];
 
 /**
  * Refreshes the Supabase session on every matched request and writes the

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Seu link de acesso</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background: #f6f4fb;
+      font-family:
+        Inter,
+        Segoe UI,
+        Helvetica,
+        Arial,
+        sans-serif;
+    "
+  >
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background: #f6f4fb; padding: 24px 12px"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            style="max-width: 560px; background: #ffffff; border: 1px solid #e7e3f1; border-radius: 20px"
+          >
+            <tr>
+              <td style="padding: 28px">
+                <p style="margin: 0 0 20px; color: #6d28d9; font-weight: 700; font-size: 15px">
+                  Tech Resolute
+                </p>
+                <h1 style="margin: 0 0 8px; color: #16131f; font-size: 22px; line-height: 28px">
+                  Seu link de acesso
+                </h1>
+                <p style="margin: 0; color: #3d3850; font-size: 15px; line-height: 22px">
+                  Use o botão abaixo para entrar no seu painel. Não é preciso digitar senha.
+                </p>
+                <p style="margin: 24px 0 0">
+                  <a
+                    href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&amp;type=email&amp;next=/dashboard"
+                    style="
+                      display: inline-block;
+                      background: #6d28d9;
+                      color: #ffffff;
+                      text-decoration: none;
+                      font-weight: 600;
+                      font-size: 14px;
+                      padding: 12px 20px;
+                      border-radius: 12px;
+                    "
+                    >Entrar no painel</a
+                  >
+                </p>
+                <p style="margin: 24px 0 0; color: #5b5670; font-size: 13px; line-height: 18px">
+                  O link vale por 1 hora e funciona uma única vez. Se você não pediu este acesso, ignore esta
+                  mensagem.
+                </p>
+              </td>
+            </tr>
+          </table>
+          <p style="margin: 16px 0 0; color: #5b5670; font-size: 12px">Enviado pela Agenda Tech Resolute.</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

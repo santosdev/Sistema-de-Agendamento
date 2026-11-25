@@ -41,12 +41,11 @@ test("demo host: meetings, simulated edits and sign out", async ({ page }, info)
   // On mobile the card lives in the closed drawer.
   if (info.project.name !== "mobile") await expect(page.getByText("Modo demonstração").first()).toBeVisible();
 
+  // Tabs show a counter: "Passadas 5".
   for (const tab of ["Passadas", "Canceladas", "Próximas"]) {
-    await main(page).getByRole("link", { name: tab, exact: true }).click();
-    await expect(main(page).getByRole("link", { name: tab, exact: true })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
+    const link = main(page).getByRole("link", { name: new RegExp(`^${tab} \\d+$`) });
+    await link.click();
+    await expect(link).toHaveAttribute("aria-current", "page");
   }
 
   await goTo(page, "Disponibilidade");
@@ -84,7 +83,9 @@ test("demo host creates, edits and deletes an event type", async ({ page }, info
 
   await main(page).getByLabel("Duração (minutos)").fill("45");
   await main(page).getByRole("button", { name: "Salvar alterações" }).click();
-  await expect(main(page).getByText("Alterações salvas.")).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("status").filter({ hasText: "Alterações salvas." })).toBeVisible({
+    timeout: 15_000,
+  });
 
   const guest = await page.context().newPage();
   await guest.goto(`/marina-demo/${slug}`);

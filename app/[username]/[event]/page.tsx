@@ -13,10 +13,9 @@ async function load(params: PageProps<"/[username]/[event]">["params"]) {
 export async function generateMetadata({ params }: PageProps<"/[username]/[event]">): Promise<Metadata> {
   const data = await load(params);
   if (!data) return {};
-  return {
-    title: `${data.event.title} · ${data.host.displayName}`,
-    description: data.event.description ?? undefined,
-  };
+  const title = `${data.event.title} · ${data.host.displayName}`;
+  const description = data.event.description ?? undefined;
+  return { title, description, openGraph: { title, description }, twitter: { title, description } };
 }
 
 /** Booking page: calendar, times in the guest zone, form and confirmation. */

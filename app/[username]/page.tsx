@@ -17,7 +17,9 @@ export async function generateMetadata({ params }: PageProps<"/[username]">): Pr
   const { username } = await params;
   const host = await getPublicHost(username);
   if (!host) return {};
-  return { title: host.displayName, description: host.welcomeMessage ?? undefined };
+  const title = host.displayName;
+  const description = host.welcomeMessage ?? undefined;
+  return { title, description, openGraph: { title, description }, twitter: { title, description } };
 }
 
 /** RN: /[username] shows the public profile and active events (DESIGN.md 10.1). */

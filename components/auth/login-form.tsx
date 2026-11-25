@@ -19,9 +19,10 @@ export function LoginForm() {
   const [mode, setMode] = useState<Mode>("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(
-    params.get("error") === "link_invalid" ? t.errors.link_invalid : null,
-  );
+  const [error, setError] = useState<string | null>(null);
+  // Read on every render: a redirect can reuse a login page that is already mounted.
+  const [linkDismissed, setLinkDismissed] = useState(false);
+  const linkError = params.get("error") === "link_invalid" && !linkDismissed ? t.errors.link_invalid : null;
   const [sent, setSent] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [demoPending, startDemo] = useTransition();
@@ -36,6 +37,7 @@ export function LoginForm() {
   function submit(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
+    setLinkDismissed(true);
     setSent(null);
     startTransition(async () => {
       if (mode === "password") {
@@ -51,7 +53,7 @@ export function LoginForm() {
 
   return (
     <div className="flex flex-col gap-5">
-      {error ? <Alert>{error}</Alert> : null}
+      {(error ?? linkError) ? <Alert>{error ?? linkError}</Alert> : null}
       {sent ? <Alert tone="success">{sent}</Alert> : null}
 
       <form onSubmit={submit} className="flex flex-col gap-4">
@@ -78,6 +80,14 @@ export function LoginForm() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </Field>
+        ) : null}
+        {mode === "password" ? (
+          <Link
+            href="/forgot-password"
+            className="-mt-1 self-end text-label font-semibold text-brand underline-offset-2 hover:underline"
+          >
+            {t.forgotPassword}
+          </Link>
         ) : null}
         <Button type="submit" size="lg" loading={pending} className="w-full">
           {mode === "password"

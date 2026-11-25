@@ -6,6 +6,7 @@ import { TimeZonePicker } from "@/components/booking/time-zone-picker";
 import { Alert } from "@/components/ui/alert";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { describedBy, Field, Input, Textarea } from "@/components/ui/field";
 import type { Host } from "@/lib/auth/session";
 import { setAvatarAction, updateProfileAction, type DashboardResult } from "@/lib/dashboard/actions";
@@ -31,7 +32,7 @@ export function ProfileForm({ host, appUrl }: { host: Host; appUrl: string }) {
   const [welcome, setWelcome] = useState(host.welcomeMessage ?? "");
   const [isPublic, setIsPublic] = useState(host.isPublic);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const toast = useToast();
   const [fieldErrors, setFieldErrors] = useState<{ displayName?: string; username?: string }>({});
   const [pending, startTransition] = useTransition();
   const [uploading, startUpload] = useTransition();
@@ -42,13 +43,12 @@ export function ProfileForm({ host, appUrl }: { host: Host; appUrl: string }) {
 
   function result(r: DashboardResult, message: string) {
     if (!r.ok) setError(errorText(r.error));
-    else setSuccess(message);
+    else toast(message);
   }
 
   function save(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
-    setSuccess(null);
     const errors = {
       displayName: displayName.trim() ? undefined : t.dashboard.events.errors.required,
       username: USERNAME_RE.test(username.trim().toLowerCase()) ? undefined : tp.usernameInvalid,
@@ -69,7 +69,6 @@ export function ProfileForm({ host, appUrl }: { host: Host; appUrl: string }) {
 
   function upload(file: File) {
     setError(null);
-    setSuccess(null);
     const ext = AVATAR_TYPES[file.type];
     if (!ext) return setError(tp.avatarType);
     if (file.size > AVATAR_MAX) return setError(tp.avatarTooBig);
@@ -90,7 +89,6 @@ export function ProfileForm({ host, appUrl }: { host: Host; appUrl: string }) {
   return (
     <form noValidate onSubmit={save} className="flex max-w-2xl flex-col gap-6">
       {error ? <Alert>{error}</Alert> : null}
-      {success ? <Alert tone="success">{success}</Alert> : null}
 
       <section className="flex flex-col gap-5 rounded-card border border-border bg-surface p-5 shadow-card sm:p-7">
         <div className="flex flex-wrap items-center gap-4">

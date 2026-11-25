@@ -7,6 +7,7 @@ import { CancelDialog } from "@/components/manage/cancel-dialog";
 import { ReschedulePanel } from "@/components/manage/reschedule-panel";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/toast";
 import { StatusBadge } from "@/components/ui/chip";
 import {
   hostCancelBookingAction,
@@ -34,7 +35,7 @@ export function MeetingsList({ tab, meetings, hostTimeZone, username, publicUrl 
   const tm = t.dashboard.meetings;
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const toast = useToast();
   const [cancelling, setCancelling] = useState<HostMeeting | null>(null);
   const [rescheduling, setRescheduling] = useState<HostMeeting | null>(null);
   const [rescheduleZone, setRescheduleZone] = useState(hostTimeZone);
@@ -49,7 +50,7 @@ export function MeetingsList({ tab, meetings, hostTimeZone, username, publicUrl 
         return;
       }
       after();
-      setSuccess(done);
+      toast(done);
     });
   }
 
@@ -91,7 +92,6 @@ export function MeetingsList({ tab, meetings, hostTimeZone, username, publicUrl 
 
   return (
     <div className="flex flex-col gap-6">
-      {success ? <Alert tone="success">{success}</Alert> : null}
       {error ? <Alert>{error}</Alert> : null}
 
       {meetings.length === 0 ? (
@@ -120,12 +120,10 @@ export function MeetingsList({ tab, meetings, hostTimeZone, username, publicUrl 
                   hostTimeZone={hostTimeZone}
                   now={now}
                   onCancel={() => {
-                    setSuccess(null);
                     setError(null);
                     setCancelling(m);
                   }}
                   onReschedule={() => {
-                    setSuccess(null);
                     setError(null);
                     setRescheduling(m);
                   }}
