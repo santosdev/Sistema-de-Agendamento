@@ -1,0 +1,10 @@
+.next
+node_modules
+coverage
+playwright-report
+test-results
+package-lock.json
+components/brand/logo-r-path.ts
+app/icon.svg
+public
+*.md
