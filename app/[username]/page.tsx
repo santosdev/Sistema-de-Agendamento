@@ -33,8 +33,11 @@ export default async function HostPage({ params }: PageProps<"/[username]">) {
 
   return (
     <>
-      <SiteHeader width="max-w-[720px]" />
-      <main id="main" className="mx-auto flex w-full max-w-[720px] flex-1 flex-col gap-6 px-4 pb-12 sm:px-6">
+      <SiteHeader width="max-w-[75rem]" />
+      <main
+        id="main"
+        className="mx-auto flex w-full max-w-[75rem] flex-1 flex-col gap-6 px-4 pb-12 sm:px-6 lg:px-10"
+      >
         <section className="flex flex-col items-center gap-4 rounded-card border border-border bg-surface p-6 text-center shadow-card sm:p-8">
           <Avatar name={host.displayName} src={host.avatarUrl} size={72} />
           <div className="flex flex-col gap-2">
@@ -62,16 +65,16 @@ export default async function HostPage({ params }: PageProps<"/[username]">) {
               </p>
             </div>
           ) : (
-            <ul className="flex flex-col gap-3">
+            <ul className="grid gap-3 md:grid-cols-2 lg:gap-4 xl:grid-cols-3">
               {events.map((event) => {
                 const location = describeLocation(event.locationType, event.phoneMode, event.address, {
                   booked: false,
                 });
                 return (
-                  <li key={event.id}>
+                  <li key={event.id} className="flex">
                     <Link
                       href={`/${host.username}/${event.slug}`}
-                      className="group relative flex items-center gap-4 overflow-hidden rounded-card-sm border border-border bg-surface p-5 pt-6 shadow-card transition-[border-color,transform] duration-(--duration-base) ease-out-soft hover:border-border-input active:scale-[0.995]"
+                      className="group relative flex w-full items-center gap-4 overflow-hidden rounded-card-sm border border-border bg-surface p-5 pt-6 shadow-card transition-[border-color,transform] duration-(--duration-base) ease-out-soft hover:border-border-input active:scale-[0.995]"
                     >
                       <span
                         aria-hidden="true"

@@ -112,7 +112,7 @@ export function TimeZonePicker({ value, onChange, align = "right" }: Props) {
   }
 
   return (
-    <div ref={rootRef} className="relative">
+    <div ref={rootRef} className="relative min-w-0">
       <button
         ref={buttonRef}
         type="button"
@@ -124,7 +124,9 @@ export function TimeZonePicker({ value, onChange, align = "right" }: Props) {
       >
         <Globe aria-hidden="true" className="size-[18px] shrink-0" />
         <span className="truncate">{label}</span>
-        {now ? <span className="text-ink-muted tabular-nums">{formatTime(now, value)}</span> : null}
+        {now ? (
+          <span className="hidden text-ink-muted tabular-nums sm:inline">{formatTime(now, value)}</span>
+        ) : null}
         <ChevronDown
           aria-hidden="true"
           className={cn("size-4 shrink-0 transition-transform", open && "rotate-180")}

@@ -25,7 +25,7 @@ export default function HomePage() {
   return (
     <div className="relative isolate flex flex-1 flex-col overflow-x-clip">
       <Backdrop />
-      <SiteHeader width="max-w-[1080px]">
+      <SiteHeader width="max-w-[100rem]">
         <ButtonLink href="/login" variant="ghost" size="sm">
           {l.signIn}
         </ButtonLink>
@@ -33,22 +33,24 @@ export default function HomePage() {
 
       <main
         id="main"
-        className="mx-auto flex w-full max-w-[1080px] flex-1 flex-col gap-20 px-4 pb-16 sm:gap-28 sm:px-6"
+        className="mx-auto flex w-full max-w-[100rem] flex-1 flex-col gap-20 px-4 pb-16 sm:gap-28 sm:px-6 lg:px-10 2xl:gap-36"
       >
         {/* Hero */}
-        <section className="grid items-center gap-12 pt-6 sm:pt-12 lg:grid-cols-[1.05fr_1fr] lg:gap-10">
+        <section className="grid items-center gap-12 pt-6 sm:pt-12 lg:min-h-[min(72dvh,760px)] lg:grid-cols-[1.05fr_1fr] lg:gap-12 2xl:gap-20">
           <div className="flex flex-col items-start gap-6">
             <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3 py-1.5 text-caption font-medium text-ink-secondary shadow-card backdrop-blur">
               <Sparkles aria-hidden="true" className="size-3.5 text-brand" />
               {l.badge}
             </span>
-            <h1 className="max-w-xl font-display text-[2.25rem] leading-[2.6rem] font-bold tracking-normal text-ink sm:text-[3.25rem] sm:leading-[3.6rem]">
+            <h1 className="max-w-xl font-display text-[2.25rem] leading-[2.6rem] font-bold tracking-normal text-ink sm:text-[3.25rem] sm:leading-[3.6rem] xl:max-w-2xl xl:text-[4rem] xl:leading-[4.4rem] 2xl:text-[4.75rem] 2xl:leading-[5.1rem]">
               {l.titleLead}{" "}
               <span className="bg-linear-to-r from-brand to-brand-glow bg-clip-text text-transparent">
                 {l.titleHighlight}
               </span>
             </h1>
-            <p className="max-w-lg text-[1.0625rem] leading-7 text-ink-secondary">{l.subtitle}</p>
+            <p className="max-w-lg text-[1.0625rem] leading-7 text-ink-secondary xl:max-w-xl xl:text-[1.1875rem] xl:leading-8">
+              {l.subtitle}
+            </p>
             <div className="flex flex-wrap gap-3">
               <ButtonLink
                 href={`/${DEMO_USERNAME}`}
@@ -78,7 +80,7 @@ export default function HomePage() {
           <h2 id="features" className="text-caption font-semibold tracking-wider text-brand uppercase">
             {l.featuresHeading}
           </h2>
-          <ul className="grid gap-4 sm:grid-cols-3">
+          <ul className="grid gap-4 md:grid-cols-3 lg:gap-6">
             {features.map(({ key, icon: Icon }) => (
               <li
                 key={key}
@@ -99,9 +101,9 @@ export default function HomePage() {
           <h2 id="steps" className="text-caption font-semibold tracking-wider text-brand uppercase">
             {l.stepsHeading}
           </h2>
-          <ol className="grid gap-6 sm:grid-cols-3 sm:gap-4">
+          <ol className="grid gap-6 md:grid-cols-3 md:gap-4 lg:gap-8">
             {steps.map(({ key, icon: Icon }, i) => (
-              <li key={key} className="relative flex gap-4 sm:flex-col">
+              <li key={key} className="relative flex gap-4 md:flex-col">
                 <div className="flex items-center gap-3">
                   <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-surface font-display text-label font-bold text-ink shadow-card">
                     {i + 1}
@@ -109,7 +111,7 @@ export default function HomePage() {
                   {i < steps.length - 1 ? (
                     <span
                       aria-hidden="true"
-                      className="hidden h-px flex-1 bg-linear-to-r from-border to-transparent sm:block"
+                      className="hidden h-px flex-1 bg-linear-to-r from-border to-transparent md:block"
                     />
                   ) : null}
                 </div>
@@ -150,7 +152,7 @@ export default function HomePage() {
       </main>
 
       <footer className="border-t border-divider">
-        <div className="mx-auto flex w-full max-w-[1080px] flex-wrap justify-between gap-4 px-4 py-6 text-caption text-ink-muted sm:px-6">
+        <div className="mx-auto flex w-full max-w-[100rem] flex-wrap justify-between gap-4 px-4 py-6 text-caption text-ink-muted sm:px-6 lg:px-10">
           <span>{t.common.madeWith}</span>
           <Link href="/privacy" className="underline-offset-2 hover:text-ink hover:underline">
             {l.privacy}
@@ -189,7 +191,10 @@ function BookingPreview() {
   const times = ["09:00", "09:30", "10:30", "14:00"];
 
   return (
-    <figure aria-label={p.label} className="relative mx-auto w-full max-w-[480px] lg:mr-0">
+    <figure
+      aria-label={p.label}
+      className="relative mx-auto w-full max-w-[520px] lg:mr-0 lg:max-w-[560px] 2xl:max-w-[640px]"
+    >
       <div
         aria-hidden="true"
         className="absolute -inset-4 -z-10 rounded-[28px] bg-linear-to-br from-brand/25 via-transparent to-brand-glow/20 blur-2xl"

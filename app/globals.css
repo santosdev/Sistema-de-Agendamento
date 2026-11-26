@@ -5,6 +5,23 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  /* Large monitors: grow the root size so rem based type, spacing and widths scale with the screen. */
+  @media (width >= 1800px) {
+    html {
+      font-size: 106.25%;
+    }
+  }
+  @media (width >= 2200px) {
+    html {
+      font-size: 118.75%;
+    }
+  }
+  @media (width >= 3000px) {
+    html {
+      font-size: 137.5%;
+    }
+  }
+
   html {
     color-scheme: light;
     transition: background-color var(--duration-base);
