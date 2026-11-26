@@ -19,6 +19,6 @@ describe("logo R", () => {
   it("favicon uses the same path in brand purple", () => {
     const icon = read("app/icon.svg");
     expect(icon).toContain(`d="${officialPath}"`);
-    expect(icon).toContain('fill="#6D28D9"');
+    expect(icon).toContain('fill="#5B02FD"');
   });
 });

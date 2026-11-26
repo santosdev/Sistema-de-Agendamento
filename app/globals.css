@@ -1,9 +1,30 @@
 @import "tailwindcss";
 @import "./theme.css";
 
+/* Class based dark mode (html.dark), see app/layout.tsx. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
+  /* Large monitors: grow the root size so rem based type, spacing and widths scale with the screen. */
+  @media (width >= 1800px) {
+    html {
+      font-size: 106.25%;
+    }
+  }
+  @media (width >= 2200px) {
+    html {
+      font-size: 118.75%;
+    }
+  }
+  @media (width >= 3000px) {
+    html {
+      font-size: 137.5%;
+    }
+  }
+
   html {
     color-scheme: light;
+    transition: background-color var(--duration-base);
     -webkit-text-size-adjust: 100%;
   }
 
@@ -11,10 +32,19 @@
     @apply bg-bg font-sans text-body text-ink antialiased;
   }
 
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-brand) 28%, transparent);
+  }
+
   h1,
   h2,
   h3 {
     text-wrap: balance;
+  }
+
+  /* Clash Display has a narrow space glyph; open it up so words do not run together. */
+  .font-display {
+    word-spacing: 0.12em;
   }
 
   p {

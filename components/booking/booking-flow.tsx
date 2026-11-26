@@ -198,7 +198,7 @@ export function BookingFlow({ host, event, embed }: Props) {
 
       <main
         id="main"
-        className="mx-auto flex w-full max-w-[1080px] flex-1 flex-col gap-4 px-4 pb-32 sm:px-6 sm:pb-12"
+        className="mx-auto flex w-full max-w-[82.5rem] flex-1 flex-col gap-4 px-4 pb-32 sm:px-6 sm:pb-12 lg:px-10"
       >
         {embed ? (
           <div className="flex justify-end pt-3">
@@ -233,7 +233,7 @@ export function BookingFlow({ host, event, embed }: Props) {
             <motion.div
               key="card"
               {...stepMotion}
-              className="grid overflow-hidden rounded-card border border-border bg-surface shadow-card lg:grid-cols-[280px_minmax(0,1fr)]"
+              className="grid overflow-hidden rounded-card border border-border bg-surface shadow-card lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)]"
             >
               <aside className="border-b border-divider p-5 sm:p-7 lg:border-r lg:border-b-0">
                 <EventSummary
@@ -261,7 +261,7 @@ export function BookingFlow({ host, event, embed }: Props) {
                     <motion.div
                       key="pick"
                       {...stepMotion}
-                      className="grid gap-8 sm:grid-cols-[minmax(0,1fr)_220px] lg:grid-cols-[minmax(0,1fr)_248px]"
+                      className="grid gap-8 sm:grid-cols-[minmax(0,1fr)_220px] lg:grid-cols-[minmax(0,1fr)_248px] xl:grid-cols-[minmax(0,1fr)_300px]"
                     >
                       <div className="flex flex-col gap-4">
                         {notice ? <Alert>{notice}</Alert> : null}

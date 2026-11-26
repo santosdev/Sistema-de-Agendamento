@@ -4,12 +4,12 @@ import { getMessages } from "@/lib/i18n";
 export default function Loading() {
   return (
     <div aria-busy="true" aria-label={getMessages().common.loading} className="flex flex-1 flex-col">
-      <div className="mx-auto flex w-full max-w-[1080px] items-center justify-between px-4 py-5 sm:px-6">
+      <div className="mx-auto flex w-full max-w-[82.5rem] items-center justify-between px-4 py-5 sm:px-6 lg:px-10">
         <Skeleton className="h-9 w-36" />
         <Skeleton className="h-9 w-44" />
       </div>
-      <div className="mx-auto w-full max-w-[1080px] px-4 sm:px-6">
-        <div className="grid overflow-hidden rounded-card border border-border bg-surface lg:grid-cols-[280px_minmax(0,1fr)]">
+      <div className="mx-auto w-full max-w-[82.5rem] px-4 sm:px-6 lg:px-10">
+        <div className="grid overflow-hidden rounded-card border border-border bg-surface lg:grid-cols-[280px_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)]">
           <div className="flex flex-col gap-4 border-b border-divider p-7 lg:border-r lg:border-b-0">
             <Skeleton className="h-10 w-40" />
             <Skeleton className="h-7 w-48" />
@@ -17,7 +17,7 @@ export default function Loading() {
             <Skeleton className="h-4 w-32" />
             <Skeleton className="h-16 w-full" />
           </div>
-          <div className="grid gap-8 p-7 sm:grid-cols-[minmax(0,1fr)_220px] lg:grid-cols-[minmax(0,1fr)_248px]">
+          <div className="grid gap-8 p-7 sm:grid-cols-[minmax(0,1fr)_220px] lg:grid-cols-[minmax(0,1fr)_248px] xl:grid-cols-[minmax(0,1fr)_300px]">
             <div className="flex flex-col gap-4">
               <Skeleton className="h-11 w-40" />
               <div className="grid grid-cols-7 gap-1">

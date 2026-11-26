@@ -3,8 +3,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useId, useMemo, useRef, useState, useTransition, type ReactNode } from "react";
-import { useFieldArray, useForm, type FieldError as RhfError } from "react-hook-form";
+import { useId, useState, useTransition, type ReactNode } from "react";
+import { useFieldArray, useForm, useWatch, type FieldError as RhfError } from "react-hook-form";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
@@ -37,12 +37,11 @@ export function EventForm({ id, initial, baseUrl }: Props) {
   const router = useRouter();
   // Unique per form: Next keeps hidden copies of visited pages in the DOM.
   const uid = useId();
-  const schema = useMemo(() => eventTypeSchema(te.errors), [te]);
+  const [schema] = useState(() => eventTypeSchema(te.errors));
   const {
     register,
     control,
     handleSubmit,
-    watch,
     setValue,
     getValues,
     formState: { errors, isSubmitted, dirtyFields },
@@ -56,13 +55,12 @@ export function EventForm({ id, initial, baseUrl }: Props) {
   const toast = useToast();
   const [archiveOpen, setArchiveOpen] = useState(false);
   const [pending, startTransition] = useTransition();
-  const slugEdited = useRef(Boolean(id));
+  const [slugEdited, setSlugEdited] = useState(Boolean(id));
 
-  const locationType = watch("locationType");
-  const phoneMode = watch("phoneMode");
-  const slug = watch("slug");
-  const isActive = watch("isActive");
-  const color = watch("color");
+  const [locationType, phoneMode, slug, isActive, color, questionValues] = useWatch({
+    control,
+    name: ["locationType", "phoneMode", "slug", "isActive", "color", "questions"],
+  });
   const slugHint = fill(te.fields.slugHint, { url: `${baseUrl}/${slug || "..."}` });
 
   const err = (e: RhfError | undefined) => e?.message;
@@ -115,7 +113,7 @@ export function EventForm({ id, initial, baseUrl }: Props) {
             aria-describedby={describedBy(`${uid}-title`, { error: err(errors.title) })}
             {...register("title", {
               onChange: (e) => {
-                if (!slugEdited.current)
+                if (!slugEdited)
                   setValue("slug", slugify(e.target.value), {
                     shouldValidate: isSubmitted || !!dirtyFields.slug,
                   });
@@ -130,7 +128,7 @@ export function EventForm({ id, initial, baseUrl }: Props) {
             autoCapitalize="none"
             aria-invalid={!!errors.slug || undefined}
             aria-describedby={describedBy(`${uid}-slug`, { hint: slugHint, error: err(errors.slug) })}
-            {...register("slug", { onChange: () => (slugEdited.current = true) })}
+            {...register("slug", { onChange: () => setSlugEdited(true) })}
           />
         </Field>
         <Field id={`${uid}-description`} label={te.fields.description} optionalLabel={t.common.optional}>
@@ -272,7 +270,7 @@ export function EventForm({ id, initial, baseUrl }: Props) {
         <ol className="flex flex-col gap-4">
           {questions.fields.map((q, i) => {
             const qErrors = errors.questions?.[i];
-            const type = watch(`questions.${i}.type`);
+            const type = questionValues?.[i]?.type;
             return (
               <li
                 key={q.id}

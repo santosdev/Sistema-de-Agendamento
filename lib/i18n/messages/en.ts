@@ -20,6 +20,13 @@ export const en: Messages = {
     hoursMinutes: "{h} h {m} min",
     hours: "{h} h",
     madeWith: "Made with Tech Resolute",
+    theme: {
+      title: "Change theme",
+      label: "Theme: {mode}. Change",
+      system: "system",
+      light: "light",
+      dark: "dark",
+    },
     genericError: "Something went wrong. Please try again shortly.",
     timeRange: "{start} to {end}",
   },
@@ -487,7 +494,37 @@ export const en: Messages = {
     },
   },
   landing: {
-    title: "Book meetings without the back and forth",
+    badge: "Tech Resolute online scheduling",
+    titleLead: "Book meetings",
+    titleHighlight: "without the back and forth",
+    highlights: {
+      noLogin: "No login for guests",
+      calendar: "Calendar invite included",
+      timeZone: "Automatic time zone",
+    },
+    stepsHeading: "In three steps",
+    steps: {
+      availability: {
+        title: "Set your hours",
+        body: "Build your week, days off and the rules for each meeting type.",
+      },
+      share: { title: "Share the link", body: "Send your page or add the booking button to your website." },
+      receive: { title: "Get bookings", body: "Automatic e-mail confirmation with a calendar invite." },
+    },
+    cta: {
+      title: "Ready to stop scheduling over chat?",
+      body: "Create your account in under a minute or explore the demo dashboard.",
+    },
+    preview: {
+      label: "Booking page preview",
+      host: "Marina Alves",
+      event: "Intro call",
+      meta: "30 min · Google Meet",
+      month: "December",
+      weekdays: "S,M,T,W,T,F,S",
+      slots: "Available times",
+      confirm: "Confirm",
+    },
     subtitle:
       "Share your free times, let guests pick in their own time zone and get the confirmation by email, with a calendar invite.",
     seeDemo: "See the demo page",

@@ -7,6 +7,8 @@ confirmação por e-mail com convite para o calendário.
 - Requisitos e regras de negócio: [docs/REQUISITOS.md](docs/REQUISITOS.md)
 - Banco de dados (tabelas, RLS, funções): [docs/BANCO.md](docs/BANCO.md)
 - Design (tokens, componentes, acessibilidade): [DESIGN.md](DESIGN.md)
+- Vídeos de demonstração (abrem no Chrome, Edge ou VLC): [cliente marcando uma reunião](docs/videos/cliente-como-agendar.webm)
+  e [empresa usando o painel](docs/videos/empresa-como-usar.webm)
 
 ## Funcionalidades
 

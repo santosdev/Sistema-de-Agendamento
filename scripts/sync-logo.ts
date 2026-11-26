@@ -22,7 +22,7 @@ if (!viewBox || paths.length !== 1) {
 }
 
 const [d] = paths;
-const BRAND = "#6D28D9";
+const BRAND = "#5B02FD";
 
 writeFileSync(
   resolve(root, "components/brand/logo-r-path.ts"),

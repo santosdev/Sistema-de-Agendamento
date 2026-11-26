@@ -22,6 +22,13 @@ export const ptBR = {
     hoursMinutes: "{h} h {m} min",
     hours: "{h} h",
     madeWith: "Feito com Tech Resolute",
+    theme: {
+      title: "Alterar tema",
+      label: "Tema: {mode}. Alterar",
+      system: "automático",
+      light: "claro",
+      dark: "escuro",
+    },
     genericError: "Algo deu errado. Tente de novo em instantes.",
     timeRange: "{start} a {end}",
   },
@@ -487,7 +494,43 @@ export const ptBR = {
     },
   },
   landing: {
-    title: "Agende reuniões sem troca de mensagens",
+    badge: "Agendamento online da Tech Resolute",
+    titleLead: "Agende reuniões",
+    titleHighlight: "sem troca de mensagens",
+    highlights: {
+      noLogin: "Convidado sem login",
+      calendar: "Convite para o calendário",
+      timeZone: "Fuso automático",
+    },
+    stepsHeading: "Em três passos",
+    steps: {
+      availability: {
+        title: "Defina seus horários",
+        body: "Monte a semana, as folgas e as regras de cada tipo de reunião.",
+      },
+      share: {
+        title: "Compartilhe o link",
+        body: "Envie sua página ou coloque o botão de agendamento no seu site.",
+      },
+      receive: {
+        title: "Receba as reservas",
+        body: "Confirmação automática por e-mail, com convite para o calendário.",
+      },
+    },
+    cta: {
+      title: "Pronto para parar de combinar horário por mensagem?",
+      body: "Crie sua conta em menos de um minuto ou explore o painel de demonstração.",
+    },
+    preview: {
+      label: "Prévia da página de agendamento",
+      host: "Marina Alves",
+      event: "Conversa inicial",
+      meta: "30 min · Google Meet",
+      month: "Dezembro",
+      weekdays: "D,S,T,Q,Q,S,S",
+      slots: "Horários livres",
+      confirm: "Confirmar",
+    },
     subtitle:
       "Mostre seus horários livres, deixe o convidado escolher no fuso dele e receba a confirmação por e-mail, com convite para o calendário.",
     seeDemo: "Ver a página de demonstração",
