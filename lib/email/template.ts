@@ -35,7 +35,7 @@ export function renderEmail(c: EmailContent): { html: string; text: string } {
     .join("");
 
   const cta = c.cta
-    ? `<p style="margin:24px 0 0"><a href="${escapeHtml(c.cta.url)}" style="display:inline-block;background:#6D28D9;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 20px;border-radius:12px">${escapeHtml(c.cta.label)}</a></p>`
+    ? `<p style="margin:24px 0 0"><a href="${escapeHtml(c.cta.url)}" style="display:inline-block;background:#5B02FD;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;padding:12px 20px;border-radius:12px">${escapeHtml(c.cta.label)}</a></p>`
     : "";
 
   const notes = (c.notes ?? [])
@@ -45,12 +45,12 @@ export function renderEmail(c: EmailContent): { html: string; text: string } {
   const html = `<!doctype html>
 <html lang="pt-BR">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(c.title)}</title></head>
-<body style="margin:0;padding:0;background:#F6F4FB;font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F6F4FB;padding:24px 12px">
+<body style="margin:0;padding:0;background:#F7F5FC;font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F7F5FC;padding:24px 12px">
     <tr><td align="center">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #E7E3F1;border-radius:20px">
         <tr><td style="padding:28px">
-          <p style="margin:0 0 20px;color:#6D28D9;font-weight:700;font-size:15px">Tech Resolute</p>
+          <p style="margin:0 0 20px;color:#5B02FD;font-weight:700;font-size:15px">Tech Resolute</p>
           <h1 style="margin:0 0 8px;color:#16131F;font-size:22px;line-height:28px">${escapeHtml(c.title)}</h1>
           <p style="margin:0 0 16px;color:#3D3850;font-size:15px;line-height:22px">${nl2br(c.intro)}</p>
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #EEEAF5">${rows}

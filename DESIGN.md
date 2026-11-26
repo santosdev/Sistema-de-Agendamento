@@ -33,31 +33,55 @@ Base: identidade roxa da Tech Resolute, conforme o mockup aprovado.
 
 | Token (Tailwind) | Hex | Uso |
 | --- | --- | --- |
-| `bg` | `#F6F4FB` | fundo da página |
+| `bg` | `#F7F5FC` | fundo da página |
 | `surface` | `#FFFFFF` | cards, modais, menus |
-| `surface-soft` | `#FCFBFE` | áreas internas de card, linhas zebradas, rodapé de card |
-| `border` | `#E7E3F1` | borda de card e de componentes |
-| `divider` | `#EEEAF5` | divisória interna |
-| `border-input` | `#8B85A1` | borda de input, select, textarea (3.52:1 sobre branco) |
-| `ink` | `#16131F` | texto principal, títulos |
-| `ink-secondary` | `#3D3850` | texto secundário, rótulos |
-| `ink-muted` | `#5B5670` | texto apagado, metadados, placeholders |
-| `ink-disabled` | `#A39FB5` | dias e itens indisponíveis (não interativos) |
-| `brand` | `#6D28D9` | ação principal, seleção, link, foco |
-| `brand-hover` | `#5B21B6` | hover e pressed da ação principal |
-| `brand-soft` | `#EDE7FB` | dias disponíveis, chips |
-| `brand-soft-ink` | `#3B1A86` | texto sobre `brand-soft` |
-| `slot-selected` | `#F3EEFF` | fundo do horário selecionado (borda 2 px `brand`) |
-| `sidebar` | `#16131F` | fundo da sidebar do painel |
-| `sidebar-active` | `#2A2438` | item ativo da sidebar |
-| `sidebar-ink` | `#C9C3DA` | texto inativo da sidebar |
-| `sidebar-border` | `#3A3348` | divisórias e barra do logo no escuro |
-| `focus-on-dark` | `#A78BFA` | anel de foco sobre a sidebar |
+| `surface-soft` | `#FBFAFF` | áreas internas de card, linhas zebradas, rodapé de card |
+| `border` | `#E6E1F3` | borda de card e de componentes |
+| `divider` | `#EEEAF7` | divisória interna |
+| `border-input` | `#8A84A3` | borda de input, select, textarea (3.55:1 sobre branco) |
+| `ink` | `#120B29` | texto principal, títulos |
+| `ink-secondary` | `#3A3354` | texto secundário, rótulos |
+| `ink-muted` | `#5B5575` | texto apagado, metadados, placeholders |
+| `ink-disabled` | `#A29DB8` | dias e itens indisponíveis (não interativos) |
+| `brand` | `#5B02FD` | ação principal, seleção, link, foco |
+| `brand-hover` | `#4A00D1` | hover e pressed da ação principal |
+| `brand-soft` | `#EFE7FF` | dias disponíveis, chips |
+| `brand-soft-ink` | `#3A0199` | texto sobre `brand-soft` |
+| `slot-selected` | `#F4EEFF` | fundo do horário selecionado (borda 2 px `brand`) |
+| `sidebar` | `#0C003C` | fundo da sidebar do painel |
+| `sidebar-active` | `#1F0F66` | item ativo da sidebar |
+| `sidebar-ink` | `#CDC4F2` | texto inativo da sidebar |
+| `sidebar-border` | `#2A1A75` | divisórias e barra do logo no escuro |
+| `focus-on-dark` | `#B18CFF` | anel de foco sobre a sidebar |
 | `success-soft` / `success-ink` | `#E6F4EA` / `#1E6B34` | status confirmada |
 | `warning-soft` / `warning-ink` | `#FFF1DC` / `#8A4B00` | status remarcada |
 | `neutral-soft` / `neutral-ink` | `#F1EEF6` / `#5B5670` | status cancelada, passada |
 | `danger` | `#B42318` | erro de campo, ação destrutiva |
 | `danger-soft` | `#FEF3F2` | fundo de alerta de erro |
+| `on-brand` / `on-danger` | `#FFFFFF` | texto sobre `brand` e `danger` (troca para escuro no tema escuro) |
+| `brand-glow` | `#C026D3` | segunda cor do degradê da marca (título da home) |
+| `accent` / `on-accent` | `#C6FF3D` / `#0C003C` | destaque pontual sobre fundo escuro (CTA da home) |
+
+A paleta segue a identidade do site da Tech Resolute: roxo elétrico `#5B02FD`, brilho magenta `#D94EFF`,
+limão `#C6FF3D` e fundo violeta profundo `#0C003C` (usado na sidebar).
+
+### 2.1.1 Tema escuro
+Os mesmos tokens ganham outros valores em `:root.dark` (`app/theme.css`), então nenhum componente precisa de
+variante `dark:`. O tema segue o sistema por padrão; o botão de tema (header e sidebar) alterna entre
+automático, claro e escuro e grava a escolha no `localStorage` (chave `theme`). Um script inline no
+`<head>` aplica a classe antes da pintura, sem piscar.
+
+| Token | Escuro |
+| --- | --- |
+| `bg` / `surface` / `surface-soft` | `#07021A` / `#100830` / `#160D3B` |
+| `border` / `divider` / `border-input` | `#291E57` / `#1D1446` / `#6F669E` |
+| `ink` / `ink-secondary` / `ink-muted` | `#F5F3FF` / `#D4CDF0` / `#A9A1CC` |
+| `brand` / `on-brand` | `#A281FF` / `#0C003C` (6.59:1) |
+| `brand-soft` / `brand-soft-ink` | `#22115C` / `#E1D6FF` |
+| `danger` / `on-danger` | `#F97066` / `#16131F` |
+
+Contrastes conferidos: `brand` sobre `surface` 6.48:1, `ink-muted` sobre `surface` 7.87:1, `border-input`
+sobre `surface` 3.70:1. E-mails e a imagem Open Graph ficam sempre no tema claro.
 
 `success`, `warning`, `neutral` e `danger` não vieram do mockup com todos os valores. Os que faltavam foram
 escolhidos para manter o mesmo tom e passar no AA (tabela 2.3).
@@ -83,25 +107,25 @@ A cor nunca é a única forma de identificar o evento: o nome sempre aparece em 
 
 | Texto sobre fundo | Razão | Resultado |
 | --- | --- | --- |
-| `ink` sobre `bg` | 16.78 | AAA |
-| `ink-secondary` sobre `surface` | 11.17 | AAA |
-| `ink-muted` sobre `surface` | 6.98 | AA |
-| `ink-muted` sobre `bg` | 6.40 | AA |
-| `brand` sobre `surface` | 7.10 | AAA |
-| branco sobre `brand` | 7.10 | AAA |
-| branco sobre `brand-hover` | 8.98 | AAA |
-| `brand` sobre `slot-selected` | 6.25 | AA |
-| `brand-soft-ink` sobre `brand-soft` | 10.38 | AAA |
+| `ink` sobre `bg` | 17.57 | AAA |
+| `ink-secondary` sobre `surface` | 11.79 | AAA |
+| `ink-muted` sobre `surface` | 7.00 | AA |
+| `ink-muted` sobre `bg` | 6.47 | AA |
+| `brand` sobre `surface` | 7.31 | AAA |
+| branco sobre `brand` | 7.31 | AAA |
+| branco sobre `brand-hover` | 9.49 | AAA |
+| `brand` sobre `slot-selected` | 6.45 | AA |
+| `brand-soft-ink` sobre `brand-soft` | 10.67 | AAA |
 | `success-ink` sobre `success-soft` | 5.76 | AA |
 | `warning-ink` sobre `warning-soft` | 6.11 | AA |
-| `neutral-ink` sobre `neutral-soft` | 6.08 | AA |
+| `neutral-ink` sobre `neutral-soft` | 6.11 | AA |
 | `danger` sobre `surface` | 6.57 | AA |
-| `sidebar-ink` sobre `sidebar` | 10.72 | AAA |
-| `sidebar-ink` sobre `sidebar-active` | 8.74 | AAA |
-| `focus-on-dark` sobre `sidebar` | 6.73 | AA (não texto: 3:1 exigido) |
+| `sidebar-ink` sobre `sidebar` | 11.82 | AAA |
+| `sidebar-ink` sobre `sidebar-active` | 9.69 | AAA |
+| `focus-on-dark` sobre `sidebar` | 7.46 | AA (não texto: 3:1 exigido) |
 
 Pontos de atenção:
-- `brand` sobre `sidebar` tem só 2.58:1. Por isso o foco e os destaques na sidebar usam `focus-on-dark`.
+- `brand` sobre `sidebar` tem só 2.66:1. Por isso o foco e os destaques na sidebar usam `focus-on-dark`.
 - `border-input` foi escurecido de `#DCD6EA` (mockup, 1.41:1) para `#8B85A1` (3.52:1) para cumprir o 3:1 de
   limite de componente (WCAG 1.4.11). Bordas de card (`border`) continuam claras porque não delimitam controles.
 - `ink-disabled` (2.57:1) só pode ser usado em itens não interativos e marcados com `aria-disabled`.
@@ -114,8 +138,8 @@ Fontes carregadas com `next/font/google`, `display: swap`, subconjunto `latin`.
 
 | Família | Token | Pesos | Uso |
 | --- | --- | --- | --- |
-| Space Grotesk | `font-display` | 600, 700 | títulos, números grandes, nome do mês, "Resolute" no logo |
-| Inter | `font-sans` | 400, 500, 600 | todo o resto |
+| Clash Display | `font-display` | 600, 700 | títulos, números grandes, nome do mês, "Resolute" no logo |
+| Satoshi | `font-sans` | 400, 500, 700 | todo o resto |
 
 ### Escala
 
@@ -132,7 +156,7 @@ Regras:
 - Inputs usam 16 px no mobile para o iOS não dar zoom no foco.
 - Horários usam `tabular-nums` para alinhar colunas.
 - Títulos com `text-wrap: balance`; parágrafos com `text-wrap: pretty`.
-- Letter-spacing: `-0.01em` nos títulos em Space Grotesk; padrão no Inter.
+- Letter-spacing: 0 a `0.01em` nos títulos em Clash Display, com `word-spacing: 0.12em` (o espaço da fonte é estreito); padrão no Satoshi.
 - Nunca usar caixa alta em frases. Caixa alta só em rótulos curtos de seção, 12 px, `tracking-wide`, `ink-muted`.
 
 ---
@@ -198,16 +222,16 @@ Lockup: R, barra vertical de 1 px, bloco de texto em duas linhas. 12 px de espa�
 
 | Parte | Estilo | light | dark |
 | --- | --- | --- | --- |
-| R | altura 28 px | `#6D28D9` | `#FFFFFF` |
+| R | altura 28 px | `#5B02FD` | `#FFFFFF` |
 | Barra | 1 px, altura do bloco de texto | `#CFC8E0` | `#3A3348` |
-| "Tech" | Inter 13 px, 400 | `#3D3850` | `#C9C3DA` |
-| "Resolute" | Space Grotesk 19 px, 700, linha 1 | `#16131F` | `#FFFFFF` |
+| "Tech" | Satoshi 13 px, 400 | `#3D3850` | `#C9C3DA` |
+| "Resolute" | Clash Display 19 px, 700, linha 1 | `#16131F` | `#FFFFFF` |
 
 - O elemento raiz tem `aria-label="Tech Resolute"` (e `role="img"` se não for link); o SVG e os textos internos
   ficam `aria-hidden`.
 - A barra é decorativa e pode ter contraste baixo.
 - `light` em fundos claros (header do agendamento); `dark` na sidebar do painel.
-- Favicon: `app/icon.svg` com o mesmo path e `fill="#6D28D9"`.
+- Favicon: `app/icon.svg` com o mesmo path e `fill="#5B02FD"`.
 
 ---
 
@@ -467,5 +491,6 @@ Arquivo `app/theme.css`, importado pelo `app/globals.css` na etapa 2:
 @import "./theme.css";
 ```
 
-As fontes entram como variáveis CSS do `next/font` (`--font-inter` e `--font-space-grotesk`) e são mapeadas no
+As fontes (Satoshi e Clash Display, da Fontshare, licença gratuita) ficam em `app/fonts` e entram como variáveis
+CSS do `next/font/local` (`--font-satoshi` e `--font-clash-display`), mapeadas no
 bloco `@theme inline`.

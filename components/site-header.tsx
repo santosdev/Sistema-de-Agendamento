@@ -1,8 +1,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Logo } from "@/components/brand/logo";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 
-/** Light header with the brand lockup (DESIGN.md 10.1, 10.2). */
+/** Header with the brand lockup and the theme toggle (DESIGN.md 10.1, 10.2). */
 export function SiteHeader({ children, width = "max-w-[1080px]" }: { children?: ReactNode; width?: string }) {
   return (
     <header
@@ -11,7 +12,10 @@ export function SiteHeader({ children, width = "max-w-[1080px]" }: { children?: 
       <Link href="/" aria-label="Tech Resolute" className="rounded-control">
         <Logo variant="light" />
       </Link>
-      {children}
+      <div className="flex items-center gap-1 sm:gap-2">
+        <ThemeToggle />
+        {children}
+      </div>
     </header>
   );
 }

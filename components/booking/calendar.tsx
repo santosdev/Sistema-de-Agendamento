@@ -204,7 +204,7 @@ export function Calendar({
                       available &&
                         !isSelected &&
                         "bg-brand-soft font-semibold text-brand-soft-ink hover:shadow-[inset_0_0_0_1px_var(--color-brand)]",
-                      isSelected && "scale-100 bg-brand font-semibold text-white",
+                      isSelected && "scale-100 bg-brand font-semibold text-on-brand",
                     )}
                   >
                     {Number(date.slice(8, 10))}

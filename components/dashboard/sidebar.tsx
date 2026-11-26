@@ -14,6 +14,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/brand/logo";
+import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { cn } from "@/lib/cn";
 import { signOutAction } from "@/lib/auth/actions";
 import { getMessages } from "@/lib/i18n";
@@ -57,7 +58,7 @@ export function Sidebar({ publicUrl, isDemo }: Props) {
                   className={cn(
                     "flex h-touch items-center gap-3 rounded-control px-3 text-label transition-colors",
                     active
-                      ? "bg-sidebar-active font-semibold text-white"
+                      ? "bg-sidebar-active font-semibold text-white shadow-[inset_3px_0_0_var(--color-focus-on-dark)]"
                       : "text-sidebar-ink hover:bg-sidebar-active/60 hover:text-white",
                   )}
                 >
@@ -109,10 +110,11 @@ export function Sidebar({ publicUrl, isDemo }: Props) {
     <>
       {/* Desktop */}
       <aside className="on-dark sticky top-0 hidden h-dvh w-60 shrink-0 flex-col bg-sidebar lg:flex">
-        <div className="flex h-18 items-center border-b border-sidebar-border px-5">
+        <div className="flex h-18 items-center justify-between gap-2 border-b border-sidebar-border pr-2 pl-5">
           <Link href="/dashboard" aria-label="Tech Resolute" className="rounded-control">
             <Logo variant="dark" />
           </Link>
+          <ThemeToggle tone="dark" />
         </div>
         {content}
       </aside>
@@ -122,15 +124,18 @@ export function Sidebar({ publicUrl, isDemo }: Props) {
         <Link href="/dashboard" aria-label="Tech Resolute" className="rounded-control">
           <Logo variant="dark" />
         </Link>
-        <button
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-label={t.dashboard.nav.openMenu}
-          aria-haspopup="dialog"
-          className="inline-flex size-touch items-center justify-center rounded-control text-white hover:bg-sidebar-active"
-        >
-          <Menu aria-hidden="true" className="size-5" />
-        </button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle tone="dark" />
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label={t.dashboard.nav.openMenu}
+            aria-haspopup="dialog"
+            className="inline-flex size-touch items-center justify-center rounded-control text-white hover:bg-sidebar-active"
+          >
+            <Menu aria-hidden="true" className="size-5" />
+          </button>
+        </div>
       </header>
       <dialog
         ref={drawer}

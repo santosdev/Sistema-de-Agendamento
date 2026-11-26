@@ -1,9 +1,13 @@
 @import "tailwindcss";
 @import "./theme.css";
 
+/* Class based dark mode (html.dark), see app/layout.tsx. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   html {
     color-scheme: light;
+    transition: background-color var(--duration-base);
     -webkit-text-size-adjust: 100%;
   }
 
@@ -11,10 +15,19 @@
     @apply bg-bg font-sans text-body text-ink antialiased;
   }
 
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-brand) 28%, transparent);
+  }
+
   h1,
   h2,
   h3 {
     text-wrap: balance;
+  }
+
+  /* Clash Display has a narrow space glyph; open it up so words do not run together. */
+  .font-display {
+    word-spacing: 0.12em;
   }
 
   p {

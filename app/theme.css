@@ -10,47 +10,53 @@
   --color-white: #ffffff;
 
   /* Surfaces */
-  --color-bg: #f6f4fb;
+  --color-bg: #f7f5fc;
   --color-surface: #ffffff;
-  --color-surface-soft: #fcfbfe;
+  --color-surface-soft: #fbfaff;
 
   /* Lines */
-  --color-border: #e7e3f1;
-  --color-divider: #eeeaf5;
-  --color-border-input: #8b85a1;
+  --color-border: #e6e1f3;
+  --color-divider: #eeeaf7;
+  --color-border-input: #8a84a3;
 
   /* Text */
-  --color-ink: #16131f;
-  --color-ink-secondary: #3d3850;
-  --color-ink-muted: #5b5670;
-  --color-ink-disabled: #a39fb5;
+  --color-ink: #120b29;
+  --color-ink-secondary: #3a3354;
+  --color-ink-muted: #5b5575;
+  --color-ink-disabled: #a29db8;
 
   /* Brand */
-  --color-brand: #6d28d9;
-  --color-brand-hover: #5b21b6;
-  --color-brand-soft: #ede7fb;
-  --color-brand-soft-ink: #3b1a86;
-  --color-slot-selected: #f3eeff;
+  --color-brand: #5b02fd;
+  --color-brand-hover: #4a00d1;
+  --color-on-brand: #ffffff;
+  --color-brand-glow: #c026d3;
+  --color-accent: #c6ff3d;
+  --color-on-accent: #0c003c;
+  --color-brand-soft: #efe7ff;
+  --color-brand-soft-ink: #3a0199;
+  --color-slot-selected: #f4eeff;
 
   /* Dashboard sidebar */
-  --color-sidebar: #16131f;
-  --color-sidebar-active: #2a2438;
-  --color-sidebar-ink: #c9c3da;
-  --color-sidebar-border: #3a3348;
-  --color-focus-on-dark: #a78bfa;
+  --color-sidebar: #0c003c;
+  --color-sidebar-active: #1f0f66;
+  --color-sidebar-ink: #cdc4f2;
+  --color-sidebar-border: #2a1a75;
+  --color-focus-on-dark: #b18cff;
 
   /* Logo lockup bar (light variant) */
-  --color-logo-bar: #cfc8e0;
+  --color-logo-bar: #cfc8e3;
 
   /* Status */
   --color-success-soft: #e6f4ea;
   --color-success-ink: #1e6b34;
   --color-warning-soft: #fff1dc;
   --color-warning-ink: #8a4b00;
-  --color-neutral-soft: #f1eef6;
-  --color-neutral-ink: #5b5670;
+  --color-neutral-soft: #f1eef8;
+  --color-neutral-ink: #5b5575;
   --color-danger: #b42318;
   --color-danger-soft: #fef3f2;
+  --color-danger-hover: #981d14;
+  --color-on-danger: #ffffff;
 
   /* Event type palette (all >= 4.5:1 on white) */
   --color-event-violet: #6d28d9;
@@ -66,17 +72,17 @@
   --text-display: 2rem;
   --text-display--line-height: 2.375rem;
   --text-display--font-weight: 700;
-  --text-display--letter-spacing: -0.01em;
+  --text-display--letter-spacing: 0;
 
   --text-title: 1.375rem;
   --text-title--line-height: 1.75rem;
   --text-title--font-weight: 600;
-  --text-title--letter-spacing: -0.01em;
+  --text-title--letter-spacing: 0.005em;
 
   --text-heading: 1.0625rem;
   --text-heading--line-height: 1.5rem;
   --text-heading--font-weight: 600;
-  --text-heading--letter-spacing: -0.01em;
+  --text-heading--letter-spacing: 0.01em;
 
   --text-body: 0.9375rem;
   --text-body--line-height: 1.375rem;
@@ -99,18 +105,69 @@
   --radius-control: 12px;
 
   /* Shadows */
-  --shadow-card: 0 1px 2px rgb(22 19 31 / 0.04), 0 8px 24px -12px rgb(22 19 31 / 0.08);
-  --shadow-pop: 0 2px 4px rgb(22 19 31 / 0.06), 0 16px 40px -16px rgb(22 19 31 / 0.18);
+  --shadow-card: 0 1px 2px rgb(18 11 41 / 0.04), 0 8px 24px -12px rgb(18 11 41 / 0.08);
+  --shadow-pop: 0 2px 4px rgb(18 11 41 / 0.06), 0 16px 40px -16px rgb(18 11 41 / 0.18);
 
   /* Easing */
   --ease-out-soft: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-soft: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
+/*
+ * Dark theme: same token names, new values. Utilities read var(--color-*), so every
+ * component follows without dark: variants. Set by the inline script in app/layout.tsx.
+ */
+:root.dark {
+  color-scheme: dark;
+
+  --color-bg: #07021a;
+  --color-surface: #100830;
+  --color-surface-soft: #160d3b;
+
+  --color-border: #291e57;
+  --color-divider: #1d1446;
+  --color-border-input: #6f669e;
+
+  --color-ink: #f5f3ff;
+  --color-ink-secondary: #d4cdf0;
+  --color-ink-muted: #a9a1cc;
+  --color-ink-disabled: #5a5283;
+
+  --color-brand: #a281ff;
+  --color-brand-hover: #bfa6ff;
+  --color-on-brand: #0c003c;
+  --color-brand-glow: #d94eff;
+  --color-brand-soft: #22115c;
+  --color-brand-soft-ink: #e1d6ff;
+  --color-slot-selected: #1d0e52;
+
+  --color-sidebar: #05010f;
+  --color-sidebar-active: #190c48;
+  --color-sidebar-ink: #cdc4f2;
+  --color-sidebar-border: #21154f;
+  --color-focus-on-dark: #b18cff;
+
+  --color-logo-bar: #3a2f6b;
+
+  --color-success-soft: #10291a;
+  --color-success-ink: #86e0a0;
+  --color-warning-soft: #2e2110;
+  --color-warning-ink: #f6bd77;
+  --color-neutral-soft: #1d1446;
+  --color-neutral-ink: #bab3da;
+  --color-danger: #f97066;
+  --color-danger-soft: #2c1513;
+  --color-danger-hover: #fb8f87;
+  --color-on-danger: #16131f;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px -12px rgb(0 0 0 / 0.6);
+  --shadow-pop: 0 2px 4px rgb(0 0 0 / 0.4), 0 16px 40px -16px rgb(0 0 0 / 0.7);
+}
+
 /* Fonts come from next/font CSS variables set on <html>. */
 @theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-clash-display), var(--font-satoshi), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Mobile sizes for the two largest type tokens. */

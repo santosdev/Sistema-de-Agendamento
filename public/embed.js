@@ -20,7 +20,7 @@
 
   var script = document.currentScript;
   var appOrigin = script ? new URL(script.src, location.href).origin : location.origin;
-  var BRAND = "#6D28D9";
+  var BRAND = "#5B02FD";
   var overlay = null;
   var lastFocus = null;
 
@@ -36,7 +36,7 @@
     frame.title = title || "Agendamento";
     frame.loading = "lazy";
     frame.setAttribute("allow", "clipboard-write");
-    frame.style.cssText = "border:0;width:100%;display:block;background:#F6F4FB;";
+    frame.style.cssText = "border:0;width:100%;display:block;background:#F7F5FC;";
     return frame;
   }
 
@@ -80,7 +80,7 @@
 
     var box = document.createElement("div");
     box.style.cssText =
-      "position:relative;width:min(1080px,100%);height:min(760px,100%);border-radius:20px;overflow:hidden;background:#F6F4FB;box-shadow:0 16px 40px -16px rgba(22,19,31,.4);";
+      "position:relative;width:min(1080px,100%);height:min(760px,100%);border-radius:20px;overflow:hidden;background:#F7F5FC;box-shadow:0 16px 40px -16px rgba(22,19,31,.4);";
 
     var closeBtn = document.createElement("button");
     closeBtn.type = "button";

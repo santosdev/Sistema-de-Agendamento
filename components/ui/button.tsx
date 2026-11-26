@@ -13,11 +13,12 @@ const base =
   "select-none";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-brand text-white hover:bg-brand-hover",
+  primary:
+    "bg-brand text-on-brand shadow-[inset_0_1px_0_rgb(255_255_255/0.12),0_1px_2px_rgb(22_19_31/0.12)] hover:bg-brand-hover",
   secondary: "border border-border bg-surface text-ink hover:bg-surface-soft hover:border-border-input",
   ghost: "text-ink-secondary hover:bg-brand-soft hover:text-brand-soft-ink",
   danger: "border border-border bg-surface text-danger hover:bg-danger-soft",
-  "danger-solid": "bg-danger text-white hover:bg-[#981d14]",
+  "danger-solid": "bg-danger text-on-danger hover:bg-danger-hover",
 };
 
 const sizes: Record<Size, string> = {
