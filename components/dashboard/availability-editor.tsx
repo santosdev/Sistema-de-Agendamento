@@ -22,7 +22,8 @@ import { errorText } from "./error-text";
 
 type Interval = { start: string; end: string };
 
-const timeInput = cn(controlClasses, "h-control w-[7.5rem] tabular-nums");
+// `!` because cn does not merge classes and controlClasses sets w-full.
+const timeInput = cn(controlClasses, "h-control w-[7.5rem]! tabular-nums");
 
 export function AvailabilityEditor({
   timeZone,
@@ -218,7 +219,7 @@ function Overrides({ overrides, today }: { overrides: HostOverride[]; today: str
                 setStartDate(e.target.value);
                 if (e.target.value > endDate) setEndDate(e.target.value);
               }}
-              className={cn(controlClasses, "h-control w-44")}
+              className={cn(controlClasses, "h-control w-44!")}
             />
           </label>
           <label className="flex flex-col gap-1.5 text-label text-ink-secondary">
@@ -228,7 +229,7 @@ function Overrides({ overrides, today }: { overrides: HostOverride[]; today: str
               min={startDate}
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className={cn(controlClasses, "h-control w-44")}
+              className={cn(controlClasses, "h-control w-44!")}
             />
           </label>
         </div>
