@@ -4,6 +4,35 @@ Sistema de agendamento de reuniões (estilo Calendly) da Tech Resolute. Qualquer
 disponibilidade e compartilha um link; o convidado escolhe o horário no próprio fuso, sem login, e recebe a
 confirmação por e-mail com convite para o calendário.
 
+**[Ver o site no ar](https://agendamento-techresolute.vercel.app)** ·
+[página de agendamento demo](https://agendamento-techresolute.vercel.app/marina-demo) ·
+[entrar no painel demo](https://agendamento-techresolute.vercel.app/login) (botão "Entrar como anfitrião demo", sem
+cadastro; os dados voltam ao original todo dia)
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/inicio-dark.png">
+  <img alt="Página inicial" src="docs/screenshots/inicio-light.png">
+</picture>
+
+| Convidado escolhendo o horário | Painel do anfitrião |
+| --- | --- |
+| <picture><source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/agendamento-dark.png"><img alt="Calendário de agendamento com horários livres" src="docs/screenshots/agendamento-light.png"></picture> | <picture><source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/painel-dark.png"><img alt="Painel com as próximas reuniões" src="docs/screenshots/painel-light.png"></picture> |
+
+Os prints acompanham o tema do GitHub (claro ou escuro), como o próprio app.
+
+## Destaques técnicos
+
+- **Horários calculados por função pura e testada**, com fuso do anfitrião e do convidado e horário de verão.
+- **Conflito de reserva impossível no banco:** constraint de exclusão no Postgres, não só checagem no código.
+- **Segurança em camadas:** RLS em todas as tabelas, reservas só por funções `security definer`, validação Zod no
+  servidor, rate limit por IP e honeypot.
+- **Convidado sem conta:** cancela ou remarca por link com token, e o `.ics` atualiza o mesmo evento no calendário.
+- **Qualidade:** TypeScript strict, testes unitários, testes de banco em Postgres na memória (PGlite), E2E com
+  Playwright em desktop e mobile, e CI no GitHub Actions.
+- **Visual:** tema claro e escuro, layout de 320 px a 4K, acessível por teclado e leitor de tela.
+
+## Documentação
+
 - Requisitos e regras de negócio: [docs/REQUISITOS.md](docs/REQUISITOS.md)
 - Banco de dados (tabelas, RLS, funções): [docs/BANCO.md](docs/BANCO.md)
 - Design (tokens, componentes, acessibilidade): [DESIGN.md](DESIGN.md)
@@ -91,6 +120,18 @@ Definidas em [vercel.json](vercel.json) e protegidas por `CRON_SECRET`:
 | --- | --- | --- |
 | `/api/cron/demo-reset` | 06:00 | recria os dados do demo (RN-72) |
 | `/api/cron/maintenance` | 06:30 | anonimiza convidados de reuniões com mais de 12 meses e limpa o rate limit (RN-65) |
+
+## Deploy (Vercel)
+
+A produção acompanha a branch `main`: cada push gera um deploy novo.
+
+1. Importe o repositório na Vercel e cadastre as variáveis da tabela acima. As três `NEXT_PUBLIC_` precisam ser do
+   tipo **Config** (a Vercel não aceita `NEXT_PUBLIC_` como Secret); as demais ficam como **Secret**.
+2. `NEXT_PUBLIC_APP_URL` é a URL do site, sem barra no final. Variáveis `NEXT_PUBLIC_` entram no build, então depois
+   de mudar qualquer uma é preciso fazer **Redeploy**.
+3. No Supabase, atualize a Site URL e as Redirect URLs para a URL de produção.
+4. Para os e-mails de login, ative o SMTP do Resend no Supabase (**Authentication > Emails > SMTP Settings**: host
+   `smtp.resend.com`, porta `465`, usuário `resend`, senha igual à `RESEND_API_KEY`).
 
 ## Embed
 
